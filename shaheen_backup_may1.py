@@ -1,14 +1,14 @@
 import streamlit as st
 import base64
 
-# 1. إعدادات المنصة العالمية - إخفاء القوائم غير الضرورية للزوار
+# 1. إعدادات المنصة العالمية وإخفاء شريط الإدارة للزوار
 st.set_page_config(
     page_title="ShaheenChat | Global AI Platform", 
     layout="wide", 
     initial_sidebar_state="expanded"
 )
 
-# تقنية الحقن البرمجي لضمان ثبات الشعار ومنع ظهور الأيقونات الافتراضية
+# تقنية الحقن البرمجي لضمان ثبات الشعار رقم 1
 def get_base64_image(image_path):
     try:
         with open(image_path, "rb") as img_file:
@@ -16,7 +16,7 @@ def get_base64_image(image_path):
     except Exception:
         return None
 
-# تحميل الشعار الرسمي (تأكد أن الملف باسم logo.jpg في مستودع GitHub الخاص بك)
+# تحميل الشعار الرسمي (تأكد أن الملف باسم logo.jpg في GitHub)
 img_data = get_base64_image("logo.jpg")
 logo_html = f"data:image/png;base64,{img_data}" if img_data else None
 
@@ -24,55 +24,57 @@ logo_html = f"data:image/png;base64,{img_data}" if img_data else None
 if 'usage_count' not in st.session_state:
     st.session_state.usage_count = 0
 
-# --- 2. القائمة الجانبية الاحترافية ---
+# --- 2. القائمة الجانبية المكتملة بالأيقونات ---
 with st.sidebar:
     if logo_html:
         st.image(logo_html, width=180)
     st.title("شاهين شات")
     st.write("---")
     
-    # القائمة المحدثة بالقسم الجديد "تطبيق توافق"
     menu = st.radio("القائمة الرئيسية:", 
                     ["🤖 الدردشة الذكية", 
                      "📝 المدونة العالمية (Blog)", 
                      "💎 باقات الاشتراك", 
-                     "🤝 تطبيق توافق (قريباً)", 
-                     "📞 تواصل معنا"])
+                     "🤝 تطبيق توافق (قريباً)"])
     
     st.write("---")
-    # مساحة إعلانية احترافية ثابتة
+    # قسم تواصل معنا بأيقونات احترافية
+    st.markdown("### 🌐 تابعنا وتواصل معنا")
+    st.markdown("[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/yournumber)")
+    st.markdown("[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/yourprofile)")
+    st.markdown("[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/yourprofile)")
+    
+    st.write("---")
     st.markdown("### 📢 مساحة إعلانية")
-    st.info("مساحة مخصصة للابتكارات والشركات التقنية العالمية.")
     st.write("للتواصل: tawafuq.app2026@gmail.com")
 
-# --- 3. قسم الدردشة (استبدال الروبوت الأصفر بشعارك الجديد) ---
+# --- 3. قسم الدردشة (الشعار الجديد هو أيقونة الرد) ---
 if menu == "🤖 الدردشة الذكية":
     st.header("شاهين شات | ShaheenChat")
     
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # عرض المحادثة (أيقونة المساعد هي شعارك الرسمي حصراً)
     for message in st.session_state.messages:
         avatar_img = logo_html if message["role"] == "assistant" else None
         with st.chat_message(message["role"], avatar=avatar_img):
             st.markdown(message["content"])
 
-    if prompt := st.chat_input("كيف يمكن لـ شاهين شات مساعدتك اليوم؟"):
+    if prompt := st.chat_input("تحدث مع شاهين شات..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
         if st.session_state.usage_count < 7:
             with st.chat_message("assistant", avatar=logo_html):
-                response = f"أهلاً بك في شاهين شات. أنا محركك الذكي للإبداع والابتكار العالمي. كيف يمكنني مساعدتك؟"
+                response = "أهلاً بك في شاهين شات. أنا محركك الذكي العالمي، كيف يمكنني مساعدتك؟"
                 st.markdown(response)
                 st.session_state.messages.append({"role": "assistant", "content": response})
                 st.session_state.usage_count += 1
         else:
             with st.chat_message("assistant", avatar=logo_html):
-                st.error("⚠️ استنفدت المحاولات المجانية لهذا اليوم.")
-                st.info("يرجى مراجعة 'باقات الاشتراك' للوصول غير المحدود.")
+                st.error("⚠️ استنفدت المحاولات المجانية.")
+                st.info("راجع 'باقات الاشتراك' للوصول غير المحدود.")
 
 # --- 4. قسم تطبيق توافق (قريباً) ---
 elif menu == "🤝 تطبيق توافق (قريباً)":
@@ -80,30 +82,18 @@ elif menu == "🤝 تطبيق توافق (قريباً)":
     if logo_html:
         st.image(logo_html, width=120)
     st.markdown("### **قريباً جداً**")
-    st.write("رؤيتنا القادمة لتعزيز الترابط والنمو المؤسسي الذكي.")
+    st.write("رؤيتنا القادمة لتعزيز النمو المؤسسي الذكي.")
 
-# --- 5. تنظيم المساحات (المدونة والاشتراكات) ---
+# --- 5. المدونة والاشتراكات ---
 elif menu == "📝 المدونة العالمية (Blog)":
     st.header("📚 مدونة شاهين شات (Insights)")
-    st.write("استكشف آفاق التكنولوجيا من منظور عالمي.")
     st.button("تصفح المقالات")
 
 elif menu == "💎 باقات الاشتراك":
     st.header("💎 باقات التميز")
-    c1, c2 = st.columns(2)
-    with c1:
-        st.subheader("باقة الأفراد")
-        st.write("• وصول غير محدود • دعم فني • توليد صور")
-        st.button("اشترك الآن - $9")
-    with c2:
-        st.subheader("باقة الأعمال")
-        st.write("• حلول مخصصة • تشفير متقدم • API")
-        st.button("طلب تسعير")
+    st.write("• باقة الأفراد: $9/شهرياً")
+    st.write("• باقة الأعمال: تواصل معنا عبر البريد المعتمد")
 
-elif menu == "📞 تواصل معنا":
-    st.header("🌐 تواصل عالمي")
-    st.markdown(f"📩 **البريد الإلكتروني المعتمد:** [tawafuq.app2026@gmail.com](mailto:tawafuq.app2026@gmail.com)")
-
-# --- 6. التذييل العالمي ---
+# --- 6. التذييل ---
 st.write("---")
-st.caption("ShaheenChat.com © 2026 | بوابة الذكاء الاصطناعي والابتكار الرقمي العالمي")
+st.caption("ShaheenChat.com © 2026 | بوابة الذكاء الاصطناعي العالمية")
