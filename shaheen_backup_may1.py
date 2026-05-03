@@ -3,53 +3,55 @@ import requests
 import json
 import os
 
-# 1. إعدادات الهوية واللغات العالمية
+# 1. إعدادات الهوية والواجهة العالمية
 st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wide")
 
-# 2. التصميم الاحترافي (البرغندي الملكي والخطوط السوداء)
+# 2. التصميم الملكي (تقليل مساحة الشات وزيادة الجوانب 20%)
 st.markdown("""
     <style>
-    /* زيادة المساحات الجانبية */
-    .main .block-container { padding-left: 10%; padding-right: 10%; max-width: 1200px; }
+    /* توسيع المساحات الجانبية وتقليل مساحة الشات */
+    .main .block-container { padding-left: 25% !important; padding-right: 25% !important; max-width: 100%; }
     
-    /* تنسيق العنوان والشعار على اليمين */
-    .header-container { display: flex; flex-direction: column; align-items: flex-end; margin-bottom: 20px; }
-    .logo-img { width: 100px; border-radius: 10px; border: 2px solid #800000; margin-bottom: 5px; }
-    .stTitle { color: #000000; font-family: 'Arial', sans-serif; font-size: 32px; font-weight: bold; margin: 0; }
+    /* تنسيق العنوان والشعار في أقصى اليمين */
+    .header-container { display: flex; flex-direction: column; align-items: flex-end; margin-bottom: 30px; width: 100%; }
+    .logo-img { width: 120px; border-radius: 15px; border: 3px solid #800000; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
+    .stTitle { color: #000000 !important; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 35px; font-weight: bold; margin-top: 10px; text-align: right; }
 
-    /* فقاعات الدردشة: خلفية بيضاء وبرواز خمري عريض (Bold) */
+    /* فقاعات الدردشة: برواز خمري بولد وخلفية بيضاء */
     .stChatMessage { 
         background-color: #ffffff !important; 
-        border: 3px solid #800000 !important; 
-        border-radius: 15px; 
+        border: 4px solid #800000 !important; 
+        border-radius: 20px; 
         color: #000000 !important;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        font-weight: 500;
     }
     
-    /* صندوق الكتابة: برواز خمري واضح */
-    .stChatInputContainer { border: 2px solid #800000 !important; border-radius: 10px; padding: 5px; }
+    /* صندوق الكتابة ببرواز خمري واضح */
+    .stChatInputContainer { border: 2.5px solid #800000 !important; border-radius: 15px; }
 
-    /* أيقونات التواصل الاجتماعي المحدثة (X, Facebook, Instagram) */
-    .share-container { position: fixed; top: 150px; left: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+    /* أيقونات التواصل: إزالة الخطوط والاحتفاظ بالبرواز */
+    .share-container { position: fixed; top: 120px; left: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
     .share-btn { 
-        padding: 10px; 
+        padding: 12px; 
         background-color: #ffffff; 
         color: #000000 !important; 
         border: 2px solid #800000;
-        border-radius: 10px; 
-        text-decoration: none; 
-        font-size: 13px; 
+        border-radius: 12px; 
+        text-decoration: none !important; /* إزالة الخط تحت الكلام */
+        font-size: 14px; 
         text-align: center; 
         font-weight: bold;
-        width: 80px;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        width: 90px;
+        display: block;
     }
+    .share-btn:hover { background-color: #f8f8f8; text-decoration: none !important; }
     
     [data-testid="stSidebar"] { display: none; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. عرض أيقونات التواصل الاجتماعي (تصميم احترافي)
+# 3. عرض أيقونات التواصل الاجتماعي (بدون خطوط سفلية)
 share_url = "https://shaheen-chat-system.streamlit.app"
 st.markdown(f"""
     <div class="share-container">
@@ -59,25 +61,30 @@ st.markdown(f"""
     </div>
     """, unsafe_allow_html=True)
 
-# 4. عرض الشعار والاسم (جهة اليمين)
+# 4. محرك البحث الذكي عن الشعار (لضمان جلب صورتك المرفقة)
 st.markdown('<div class="header-container">', unsafe_allow_html=True)
-logo_file = "شاهين.png" # تم تحديث الاسم بناءً على طلبك
-if os.path.exists(logo_file):
-    st.image(logo_file, width=100)
-else:
+found_logo = False
+# البحث عن الملفات التي رفعتها في GitHub
+for file in os.listdir("."):
+    if file.endswith((".png", ".jpg", ".jpeg")) and (file.startswith("لقطة") or file.startswith("شاهين")):
+        st.image(file, width=120)
+        found_logo = True
+        break
+
+if not found_logo:
     st.markdown('<h2 style="color:#800000;">🦅</h2>', unsafe_allow_html=True)
+
 st.markdown('<h1 class="stTitle">شاهين شات</h1>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 5. نظام الأمان والمفتاح السري
+# 5. نظام الأمان والمفتاح
 try:
-    raw_key = st.secrets["OPENROUTER_API_KEY"]
-    API_KEY = "".join(raw_key.split()).replace('"', '').replace("'", "").strip()
+    API_KEY = st.secrets["OPENROUTER_API_KEY"].strip().replace('"', '').replace("'", "")
 except Exception:
-    st.error("خطأ: يرجى التحقق من المفتاح في الخزنة.")
+    st.error("خطأ في الأمان: يرجى التحقق من الخزنة.")
     st.stop()
 
-# 6. الذاكرة والدردشة (تدعم العربية والإنجليزية)
+# 6. الذاكرة والدردشة العالمية
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "msg_count" not in st.session_state:
@@ -87,9 +94,9 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 7. التنفيذ والربح
+# 7. نظام التشغيل والربح
 if st.session_state.msg_count < 5:
-    if prompt := st.chat_input("تحدث مع شاهين العالمي... (Ask Shaheen anything)"):
+    if prompt := st.chat_input("تحدث مع شاهين العالمي... Ask Shaheen anything"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.session_state.msg_count += 1
         with st.chat_message("user"):
@@ -108,7 +115,7 @@ if st.session_state.msg_count < 5:
                     st.markdown(res)
                     st.session_state.messages.append({"role": "assistant", "content": res})
                 else:
-                    st.error("تنبيه: المزود يرفض الطلب، يرجى مراجعة الرصيد.")
+                    st.error("المزود العالمي يطلب التحقق من الرصيد.")
             except Exception as e:
                 st.error(f"عطل اتصال: {e}")
 else:
