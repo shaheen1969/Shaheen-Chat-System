@@ -53,7 +53,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
 # 5. منطق التشغيل
-if st.session_state.msg_count < 5 or st.session_state.is_paid:
+if st.session_state.msg_count < 10 or st.session_state.is_paid:
     if prompt := st.chat_input("تحدث مع شاهين..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.session_state.msg_count += 1
