@@ -6,94 +6,83 @@ import os
 # 1. إعدادات الهوية والواجهة العالمية
 st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wide")
 
-# 2. التصميم الملكي ومنع التداخل
+# 2. التنسيق الاحترافي الجديد (الهوية على اليمين، الأيقونات تحت العنوان)
 st.markdown("""
     <style>
-    /* توسيع الهوامش الجانبية 25% من كل جانب لتركيز الشات في المنتصف */
-    .main .block-container { padding-left: 25% !important; padding-right: 25% !important; max-width: 100%; }
+    /* موازنة الهوامش الجانبية 20% لتركيز المحتوى */
+    .main .block-container { padding-left: 20% !important; padding-right: 20% !important; max-width: 100%; }
     
-    /* تثبيت كتلة العنوان والشعار في أقصى اليمين لمنع التداخل */
+    /* كتلة الهوية (الشعار والاسم والأزرار) في أقصى اليمين */
     .header-container { 
         display: flex; 
         flex-direction: column; 
         align-items: flex-end; 
-        justify-content: flex-end;
         width: 100%;
-        margin-bottom: 40px;
-        text-align: right;
+        margin-bottom: 30px;
     }
-    .logo-img { width: 140px; border-radius: 15px; border: 3px solid #800000; margin-bottom: 10px; }
-    .stTitle { color: #000000 !important; font-family: 'Segoe UI', sans-serif; font-size: 38px; font-weight: bold; margin: 0; padding: 0; line-height: 1.2; }
+    .logo-img { width: 120px; border-radius: 12px; border: 3px solid #800000; margin-bottom: 10px; }
+    .stTitle { color: #000000 !important; font-family: 'Segoe UI', sans-serif; font-size: 36px; font-weight: bold; margin: 0; text-align: right; }
 
-    /* فقاعات الدردشة: برواز خمري عريض */
-    .stChatMessage { 
-        background-color: #ffffff !important; 
-        border: 4px solid #800000 !important; 
-        border-radius: 20px; 
-        color: #000000 !important;
-        margin-bottom: 25px;
-    }
-    
-    /* صندوق الكتابة ببرواز خمري */
-    .stChatInputContainer { border: 2.5px solid #800000 !important; border-radius: 15px; }
-
-    /* أيقونات التواصل: تثبيت في أقصى اليسار بعيداً عن الشعار */
-    .share-container { position: fixed; top: 120px; left: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
-    .share-btn { 
-        padding: 12px; 
+    /* تنسيق أزرار التواصل الاجتماعي تحت العنوان */
+    .social-btns-container { display: flex; flex-direction: row-reverse; gap: 10px; margin-top: 15px; }
+    .social-btn { 
+        padding: 6px 12px; 
         background-color: #ffffff; 
         color: #000000 !important; 
-        border: 2px solid #800000;
-        border-radius: 12px; 
+        border: 1.5px solid #800000;
+        border-radius: 8px; 
         text-decoration: none !important; 
-        font-size: 14px; 
-        text-align: center; 
+        font-size: 12px; 
         font-weight: bold;
-        width: 90px;
+        transition: 0.3s;
     }
+    .social-btn:hover { background-color: #fceeee; }
+
+    /* فقاعات الدردشة وصندوق الكتابة */
+    .stChatMessage { border: 3px solid #800000 !important; border-radius: 15px; background-color: #ffffff !important; }
+    .stChatInputContainer { border: 2px solid #800000 !important; border-radius: 12px; }
     
     [data-testid="stSidebar"] { display: none; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. أيقونات التواصل الاجتماعي (جهة اليسار)
-share_url = "https://shaheen-chat-system.streamlit.app"
-st.markdown(f"""
-    <div class="share-container">
-        <a href="https://twitter.com/intent/tweet?url={share_url}" target="_blank" class="share-btn">منصة X</a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u={share_url}" target="_blank" class="share-btn">فيسبوك</a>
-        <a href="https://www.instagram.com/" target="_blank" class="share-btn">انستغرام</a>
-    </div>
-    """, unsafe_allow_html=True)
-
-# 4. كتلة اليمين: الشعار فوق العنوان مباشرة
+# 3. بناء الهوية البصرية (الجهة اليمنى)
 st.markdown('<div class="header-container">', unsafe_allow_html=True)
 
-# البحث عن ملف الشعار (شاهين.jpeg أو لقطة الشاشة)
+# البحث التلقائي عن الشعار
 logo_file = "شاهين.jpeg"
 if not os.path.exists(logo_file):
-    # محاولة البحث عن أي ملف يبدأ بـ "لقطة" إذا لم يجد "شاهين.jpeg"
     for file in os.listdir("."):
         if file.startswith("لقطة") and file.lower().endswith((".png", ".jpg", ".jpeg")):
             logo_file = file
             break
 
 if os.path.exists(logo_file):
-    st.image(logo_file, width=140)
+    st.image(logo_file, width=120)
 else:
     st.markdown('<h2 style="color:#800000;">🦅</h2>', unsafe_allow_html=True)
 
 st.markdown('<h1 class="stTitle">شاهين شات</h1>', unsafe_allow_html=True)
+
+# إضافة أزرار التواصل الاجتماعي تحت كلمة شاهين شات بمسافة جيدة
+share_url = "https://shaheen-chat-system.streamlit.app"
+st.markdown(f"""
+    <div class="social-btns-container">
+        <a href="https://twitter.com/intent/tweet?url={share_url}" target="_blank" class="social-btn">منصة X</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={share_url}" target="_blank" class="social-btn">فيسبوك</a>
+        <a href="https://www.instagram.com/" target="_blank" class="social-btn">انستغرام</a>
+    </div>
+    """, unsafe_allow_html=True)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 5. نظام الأمان والمفتاح
+# 4. نظام التشغيل والأمان
 try:
     API_KEY = st.secrets["OPENROUTER_API_KEY"].strip().replace('"', '').replace("'", "")
 except Exception:
-    st.error("خطأ في الأمان: يرجى التحقق من الخزنة.")
+    st.error("يرجى مراجعة مفتاح الأمان.")
     st.stop()
 
-# 6. الذاكرة والدردشة
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "msg_count" not in st.session_state:
@@ -103,9 +92,8 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 7. نظام التشغيل والربح
 if st.session_state.msg_count < 5:
-    if prompt := st.chat_input("تحدث مع شاهين العالمي... Ask Shaheen anything"):
+    if prompt := st.chat_input("تحدث مع شاهين العالمي..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.session_state.msg_count += 1
         with st.chat_message("user"):
@@ -124,7 +112,7 @@ if st.session_state.msg_count < 5:
                     st.markdown(res)
                     st.session_state.messages.append({"role": "assistant", "content": res})
                 else:
-                    st.error(f"تنبيه تقني ({response.status_code}): المزود يطلب مراجعة الحساب.")
+                    st.error("يرجى مراجعة رصيد العمليات العالمي.")
             except Exception as e:
                 st.error(f"عطل اتصال: {e}")
 else:
