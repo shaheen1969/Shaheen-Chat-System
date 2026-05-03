@@ -1,75 +1,119 @@
 import streamlit as st
-# Update 2026
-# 1. إعدادات الصفحة الاحترافية
-st.set_page_config(page_title="ShaheenChat | AI Business Insights", layout="wide", page_icon="🦅")
 
-# استخدمنا أيقونة الصقر كشعار مؤقت يظهر في كل المتصفحات بلا استثناء
-SHAHEEN_ICON = "🦅"
+# 1. إعدادات الصفحة العالمية
+st.set_page_config(page_title="ShaheenChat | Global AI Platform", layout="wide")
 
-# إدارة عدد المحاولات المجانية (7 محاولات لرضا الزوار)
+# 2. الهوية الرسمية (تأكد من وجود الملف logo.jpg في GitHub)
+SHAHEEN_LOGO = "logo.jpg" 
+
+# إدارة المحاولات المجانية
 if 'usage_count' not in st.session_state:
     st.session_state.usage_count = 0
 
-# --- 2. القائمة الجانبية (المدونة والإعلانات) ---
+# --- 3. القائمة الجانبية (الشعار والروابط) ---
 with st.sidebar:
-    st.markdown(f"<h1 style='text-align: center;'>{SHAHEEN_ICON}</h1>", unsafe_allow_html=True)
-    st.title("ShaheenChat")
+    st.image(SHAHEEN_LOGO, width=200)
+    st.title("شاهين شات")
     st.write("---")
-    menu = st.radio("انتقل إلى:", ["الدردشة الذكية", "مدونة الخبراء (Insights)", "باقات الاشتراك"])
+    menu = st.radio("انتقل إلى:", ["الدردشة الذكية", "المدونة العالمية", "باقات الاشتراك", "تواصل معنا"])
     
     st.write("---")
     st.markdown("### 📢 مساحة إعلانية")
-    st.info("فرصة للمعلنين: استهدف نخبة الصناعيين والمدراء في قطر.")
-    st.write("للتواصل: ads@shaheenchat.com")
+    st.info("مساحة مخصصة للشركات والابتكارات الرقمية.")
+    st.write("للتواصل: tawafuq.app2026@gmail.com")
 
-# --- 3. القسم الأول: الدردشة الذكية ---
+# --- 4. الدردشة الذكية ---
 if menu == "الدردشة الذكية":
-    st.header(f"{SHAHEEN_ICON} مساعد شاهين الذكي")
+    col_logo, col_text = st.columns([1, 5])
+    with col_logo:
+        st.image(SHAHEEN_LOGO, width=80)
+    with col_text:
+        st.header("شاهين شات | ShaheenChat")
     
-    # مساحة إعلان علوية (Banner)
-    st.success("🎯 **إعلان:** حلول متكاملة لمصانع الألومنيوم والـ UPVC - استشارات تقنية وإدارية.")
+    st.success("🎯 **إعلان:** اكتشف الحلول الذكية التي ترسم مستقبل الأعمال عالمياً.")
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # عرض المحادثة
     for message in st.session_state.messages:
-        with st.chat_message(message["role"], avatar=SHAHEEN_ICON if message["role"] == "assistant" else None):
+        avatar_img = SHAHEEN_LOGO if message["role"] == "assistant" else None
+        with st.chat_message(message["role"], avatar=avatar_img):
             st.markdown(message["content"])
 
-    if prompt := st.chat_input("كيف يمكنني مساعدتك اليوم؟"):
+    if prompt := st.chat_input("تحدث مع شاهين شات..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
         if st.session_state.usage_count < 7:
-            with st.chat_message("assistant", avatar=SHAHEEN_ICON):
-                response = f"أهلاً بك في ShaheenChat. بصفتي مساعدك الذكي، يسعدني دعم رؤيتك المهنية. بخصوص سؤالك: {prompt}"
+            with st.chat_message("assistant", avatar=SHAHEEN_LOGO):
+                response = f"مرحباً بك في شاهين شات. أنا محركك الذكي للإبداع والابتكار. كيف يمكنني مساعدتك؟"
                 st.markdown(response)
                 st.session_state.messages.append({"role": "assistant", "content": response})
                 st.session_state.usage_count += 1
         else:
-            with st.chat_message("assistant", avatar=SHAHEEN_ICON):
-                st.error("⚠️ استنفدت المحاولات المجانية (7/7).")
-                st.write("لدعم المنصة والحصول على ميزات غير محدودة:")
-                st.button("تفعيل الباقة الاحترافية (15 ريال قطري)")
+            with st.chat_message("assistant", avatar=SHAHEEN_LOGO):
+                st.error("⚠️ وصلت للحد الأقصى للمحاولات المجانية لهذا اليوم.")
+                st.write("انتقل لصفحة 'باقات الاشتراك' للحصول على وصول غير محدود.")
 
-# --- 4. القسم الثاني: المدونة (SEO & Traffic) ---
-elif menu == "مدونة الخبراء (Insights)":
-    st.header("📚 مدونة رؤى الشاهين الصناعية")
-    st.write("مقالات حصرية تدمج بين الخبرة الميدانية والذكاء الاصطناعي.")
+# --- 5. باقات الاشتراك (محدثة بمحتوى كامل) ---
+elif menu == "باقات الاشتراك":
+    st.header("💎 اختر باقتك في شاهين شات")
+    st.write("حلول مرنة تناسب احتياجاتك الفردية والمؤسسية.")
     
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
+    
     with col1:
-        st.subheader("الذكاء الاصطناعي في مصانع قطر")
-        st.write("كيف تساهم الأتمتة في تقليل الهالك وتحسين جودة إنتاج الـ UPVC.")
-        st.button("قراءة المقال كاملاً", key="blog_1")
+        st.markdown("""
+        ### الباقة الأساسية
+        **مجاناً**
+        - 7 محاولات ذكية يومياً
+        - وصول للمحرك الأساسي
+        - دعم عبر البريد الإلكتروني
+        """)
+        st.button("الباقة الحالية", disabled=True, key="free")
         
     with col2:
-        st.subheader("مستقبل إدارة الموارد البشرية")
-        st.write("إستراتيجيات جذب الكفاءات الفنية والقيادية في قطاع العمليات.")
-        st.button("قراءة المقال كاملاً", key="blog_2")
+        st.markdown("""
+        ### الباقة الاحترافية
+        **$9 / شهرياً**
+        - محاولات غير محدودة
+        - أولوية في المعالجة
+        - توليد صور عالية الدقة
+        """)
+        st.button("اشترك الآن", key="pro")
+        
+    with col3:
+        st.markdown("""
+        ### باقة الأعمال
+        **تواصل معنا**
+        - تكامل مع أنظمة الشركات
+        - تحليل بيانات ضخمة
+        - خصوصية وتشفير متقدم
+        """)
+        st.button("طلب استشارة", key="biz")
 
-# --- 5. تذييل الصفحة ---
+# --- 6. تواصل معنا (أيقونات التواصل المحدثة) ---
+elif menu == "تواصل معنا":
+    st.header("🌐 ابقَ على تواصل")
+    st.write("يسعدنا الرد على استفساراتكم بخصوص شاهين شات أو تطبيق توافق القادم.")
+    
+    st.markdown("📩 **البريد الإلكتروني:** [tawafuq.app2026@gmail.com](mailto:tawafuq.app2026@gmail.com)")
+    
+    col_t1, col_t2 = st.columns(2)
+    with col_t1:
+        st.markdown("💼 **LinkedIn:** [ShaheenChat Official](#)")
+        st.markdown("🐦 **Twitter (X):** [@ShaheenChat](#)")
+    with col_t2:
+        st.markdown("📸 **Instagram:** [@ShaheenChat](#)")
+        st.markdown("💬 **WhatsApp:** [تواصل مباشر](#)")
+
+# --- 7. المدونة العالمية ---
+elif menu == "المدونة العالمية":
+    st.header("📚 مدونة شاهين شات (Insights)")
+    st.write("استكشف آخر توجهات الذكاء الاصطناعي والابتكار الرقمي.")
+    st.info("سيتم إضافة المقالات الحصرية قريباً...")
+
+# --- 8. التذييل ---
 st.write("---")
-st.caption("ShaheenChat.com © 2026 | بوابة الذكاء الاصطناعي الرائدة في الدوحة")
+st.caption("ShaheenChat.com © 2026 | المنصة العالمية للذكاء الاصطناعي والابتكار الرقمي")
