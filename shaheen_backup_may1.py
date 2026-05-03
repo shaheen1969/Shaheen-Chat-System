@@ -6,52 +6,57 @@ import os
 # 1. إعدادات الهوية والواجهة العالمية
 st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wide")
 
-# 2. التصميم الملكي (تقليل مساحة الشات وزيادة الجوانب 20%)
+# 2. التصميم الملكي ومنع التداخل
 st.markdown("""
     <style>
-    /* توسيع المساحات الجانبية وتقليل مساحة الشات */
+    /* توسيع الهوامش الجانبية 25% من كل جانب لتركيز الشات في المنتصف */
     .main .block-container { padding-left: 25% !important; padding-right: 25% !important; max-width: 100%; }
     
-    /* تنسيق العنوان والشعار في أقصى اليمين */
-    .header-container { display: flex; flex-direction: column; align-items: flex-end; margin-bottom: 30px; width: 100%; }
-    .logo-img { width: 120px; border-radius: 15px; border: 3px solid #800000; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
-    .stTitle { color: #000000 !important; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 35px; font-weight: bold; margin-top: 10px; text-align: right; }
+    /* تثبيت كتلة العنوان والشعار في أقصى اليمين لمنع التداخل */
+    .header-container { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: flex-end; 
+        justify-content: flex-end;
+        width: 100%;
+        margin-bottom: 40px;
+        text-align: right;
+    }
+    .logo-img { width: 140px; border-radius: 15px; border: 3px solid #800000; margin-bottom: 10px; }
+    .stTitle { color: #000000 !important; font-family: 'Segoe UI', sans-serif; font-size: 38px; font-weight: bold; margin: 0; padding: 0; line-height: 1.2; }
 
-    /* فقاعات الدردشة: برواز خمري بولد وخلفية بيضاء */
+    /* فقاعات الدردشة: برواز خمري عريض */
     .stChatMessage { 
         background-color: #ffffff !important; 
         border: 4px solid #800000 !important; 
         border-radius: 20px; 
         color: #000000 !important;
         margin-bottom: 25px;
-        font-weight: 500;
     }
     
-    /* صندوق الكتابة ببرواز خمري واضح */
+    /* صندوق الكتابة ببرواز خمري */
     .stChatInputContainer { border: 2.5px solid #800000 !important; border-radius: 15px; }
 
-    /* أيقونات التواصل: إزالة الخطوط والاحتفاظ بالبرواز */
-    .share-container { position: fixed; top: 120px; left: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
+    /* أيقونات التواصل: تثبيت في أقصى اليسار بعيداً عن الشعار */
+    .share-container { position: fixed; top: 120px; left: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
     .share-btn { 
         padding: 12px; 
         background-color: #ffffff; 
         color: #000000 !important; 
         border: 2px solid #800000;
         border-radius: 12px; 
-        text-decoration: none !important; /* إزالة الخط تحت الكلام */
+        text-decoration: none !important; 
         font-size: 14px; 
         text-align: center; 
         font-weight: bold;
         width: 90px;
-        display: block;
     }
-    .share-btn:hover { background-color: #f8f8f8; text-decoration: none !important; }
     
     [data-testid="stSidebar"] { display: none; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. عرض أيقونات التواصل الاجتماعي (بدون خطوط سفلية)
+# 3. أيقونات التواصل الاجتماعي (جهة اليسار)
 share_url = "https://shaheen-chat-system.streamlit.app"
 st.markdown(f"""
     <div class="share-container">
@@ -61,17 +66,21 @@ st.markdown(f"""
     </div>
     """, unsafe_allow_html=True)
 
-# 4. محرك البحث الذكي عن الشعار (لضمان جلب صورتك المرفقة)
+# 4. كتلة اليمين: الشعار فوق العنوان مباشرة
 st.markdown('<div class="header-container">', unsafe_allow_html=True)
-found_logo = False
-# البحث عن الملفات التي رفعتها في GitHub
-for file in os.listdir("."):
-    if file.endswith((".png", ".jpg", ".jpeg")) and (file.startswith("لقطة") or file.startswith("شاهين")):
-        st.image(file, width=120)
-        found_logo = True
-        break
 
-if not found_logo:
+# البحث عن ملف الشعار (شاهين.jpeg أو لقطة الشاشة)
+logo_file = "شاهين.jpeg"
+if not os.path.exists(logo_file):
+    # محاولة البحث عن أي ملف يبدأ بـ "لقطة" إذا لم يجد "شاهين.jpeg"
+    for file in os.listdir("."):
+        if file.startswith("لقطة") and file.lower().endswith((".png", ".jpg", ".jpeg")):
+            logo_file = file
+            break
+
+if os.path.exists(logo_file):
+    st.image(logo_file, width=140)
+else:
     st.markdown('<h2 style="color:#800000;">🦅</h2>', unsafe_allow_html=True)
 
 st.markdown('<h1 class="stTitle">شاهين شات</h1>', unsafe_allow_html=True)
@@ -84,7 +93,7 @@ except Exception:
     st.error("خطأ في الأمان: يرجى التحقق من الخزنة.")
     st.stop()
 
-# 6. الذاكرة والدردشة العالمية
+# 6. الذاكرة والدردشة
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "msg_count" not in st.session_state:
@@ -115,7 +124,7 @@ if st.session_state.msg_count < 5:
                     st.markdown(res)
                     st.session_state.messages.append({"role": "assistant", "content": res})
                 else:
-                    st.error("المزود العالمي يطلب التحقق من الرصيد.")
+                    st.error(f"تنبيه تقني ({response.status_code}): المزود يطلب مراجعة الحساب.")
             except Exception as e:
                 st.error(f"عطل اتصال: {e}")
 else:
