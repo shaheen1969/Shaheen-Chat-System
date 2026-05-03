@@ -6,7 +6,7 @@ import os
 # 1. إعدادات الهوية والواجهة العالمية
 st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wide")
 
-# 2. التنسيق الملكي (الشعار والاسم على اليمين)
+# 2. التنسيق الملكي الاحترافي
 st.markdown("""
     <style>
     .main .block-container { padding-left: 20% !important; padding-right: 20% !important; }
@@ -15,19 +15,18 @@ st.markdown("""
     .social-btns-container { display: flex; flex-direction: row-reverse; gap: 10px; margin-top: 15px; }
     .social-btn { padding: 6px 12px; background-color: #ffffff; color: #000000 !important; border: 1.5px solid #800000; border-radius: 8px; text-decoration: none !important; font-size: 12px; font-weight: bold; }
     .stChatMessage { border: 3px solid #800000 !important; border-radius: 15px; background-color: #ffffff !important; }
-    .stChatInputContainer { border: 2px solid #800000 !important; border-radius: 12px; }
+    .stChatInputContainer { border: 2.5px solid #800000 !important; border-radius: 12px; }
     [data-testid="stSidebar"] { display: none; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. بناء واجهة الأدمن (الجهة اليمنى)
+# 3. بناء الواجهة (الجهة اليمنى)
 st.markdown('<div class="header-container">', unsafe_allow_html=True)
 logo_file = "شاهين.jpeg"
 if os.path.exists(logo_file):
     st.image(logo_file, width=120)
 st.markdown('<h1 class="stTitle">شاهين شات</h1>', unsafe_allow_html=True)
 
-# أزرار التواصل الاجتماعي
 share_url = "https://shaheen-chat-system.streamlit.app"
 st.markdown(f"""
     <div class="social-btns-container">
@@ -38,20 +37,23 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 4. إدارة الدفع والاشتراك التلقائي
-# جلب مفاتيح التشغيل من الخزنة
-API_KEY = st.secrets["OPENROUTER_API_KEY"].strip()
+# 4. جلب المفاتيح بأمان (حل مشكلة KeyError)
+API_KEY = st.secrets.get("OPENROUTER_API_KEY", "").strip()
 PAYPAL_ID = st.secrets.get("PAYPAL_CLIENT_ID", "").strip()
 
+if not API_KEY:
+    st.error("⚠️ تنبيه للأدمن: مفتاح الذكاء الاصطناعي غير مفعل في الخزنة.")
+    st.stop()
+
+# 5. إدارة المحادثة والعداد
 if "messages" not in st.session_state: st.session_state.messages = []
 if "msg_count" not in st.session_state: st.session_state.msg_count = 0
 if "is_paid" not in st.session_state: st.session_state.is_paid = False
 
-# عرض الرسائل السابقة
 for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
-# 5. منطق التشغيل والربح التلقائي
+# 6. منطق التشغيل والربح
 if st.session_state.msg_count < 5 or st.session_state.is_paid:
     if prompt := st.chat_input("تحدث مع شاهين العالمي..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -68,29 +70,18 @@ if st.session_state.msg_count < 5 or st.session_state.is_paid:
                 st.session_state.messages.append({"role": "assistant", "content": res})
             except: st.error("عطل اتصال، يرجى المحاولة لاحقاً.")
 else:
-    # واجهة الدفع الذكية من PayPal
-    st.warning("⚠️ انتهت المحاولات المجانية. استمر في الحوار مع خبيرك الذكي مقابل 12 ريال قطري فقط.")
-    
-    # كود الزر الذكي لـ PayPal (تفعيل تلقائي)
-    paypal_button_html = f"""
-    <div id="paypal-button-container"></div>
-    <script src="https://www.paypal.com/sdk/js?client-id={PAYPAL_ID}&currency=USD"></script>
-    <script>
-        paypal.Buttons({{
-            createOrder: function(data, actions) {{
-                return actions.order.create({{
-                    purchase_units: [{{ amount: {{ value: '3.30' }} }}] // تعادل تقريباً 12 ريال قطري
-                }});
-            }},
-            onApprove: function(data, actions) {{
-                return actions.order.capture().then(function(details) {{
-                    window.parent.postMessage({{type: 'PAYMENT_SUCCESS'}}, '*');
-                }});
-            }}
-        }}).render('#paypal-button-container');
-    </script>
-    """
-    st.components.v1.html(paypal_button_html, height=300)
-    
-    # استقبال تأكيد الدفع وفتح الشات فوراً
-    # ملاحظة: في النسخة الاحترافية يتم ربطها بـ Session State لفتح القفل تلقائياً
+    st.warning("⚠️ انتهت المحاولات المجانية. استمر بـ 12 ريال قطري فقط.")
+    if PAYPAL_ID:
+        paypal_html = f"""
+        <div id="paypal-button-container"></div>
+        <script src="https://www.paypal.com/sdk/js?client-id={PAYPAL_ID}&currency=USD"></script>
+        <script>
+            paypal.Buttons({{
+                createOrder: function(data, actions) {{ return actions.order.create({{ purchase_units: [{{ amount: {{ value: '3.30' }} }}] }}); }},
+                onApprove: function(data, actions) {{ return actions.order.capture().then(function(details) {{ window.parent.postMessage({{type: 'PAYMENT_SUCCESS'}}, '*'); }}); }}
+            }}).render('#paypal-button-container');
+        </script>
+        """
+        st.components.v1.html(paypal_html, height=300)
+    else:
+        st.error("يرجى ربط PayPal لبدء استقبال الدفع.")
