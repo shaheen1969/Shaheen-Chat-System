@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(page_title="ShaheenChat | AI Business Insights", layout="wide")
 
 # الرابط المباشر لصورة الصقر التي أرسلتها (سنستخدمها كأفاتار)
-SHAHEEN_LOGO = "logo.jpg"
+SHAHEEN_LOGO = "logo.jpg?v=1"
 # إدارة عدد المحاولات المجانية في الجلسة
 if 'usage_count' not in st.session_state:
     st.session_state.usage_count = 0
