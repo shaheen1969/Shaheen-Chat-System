@@ -6,7 +6,7 @@ import os
 # 1. إعدادات الهوية والواجهة العالمية
 st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wide")
 
-# 2. التنسيق الاحترافي (الهوية على اليمين)
+# 2. التنسيق الملكي (الهوية على اليمين)
 st.markdown("""
     <style>
     .main .block-container { padding-left: 20% !important; padding-right: 20% !important; }
@@ -37,18 +37,17 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 4. جلب المفاتيح مع تنظيفها آلياً من المسافات
-def get_clean_secret(key):
-    try:
-        val = st.secrets[key]
-        return "".join(val.split()).strip()
-    except: return ""
+# 4. جلب المفاتيح وتطهيرها جبرياً (ضمان عدم حدوث عطل اتصال)
+def clean_key(key_name):
+    val = st.secrets.get(key_name, "")
+    # إزالة علامات التنصيص والمساحات وأي أحرف مخفية
+    return str(val).replace('"', '').replace("'", "").strip()
 
-API_KEY = get_clean_secret("OPENROUTER_API_KEY")
-PAYPAL_ID = get_clean_secret("PAYPAL_CLIENT_ID")
+API_KEY = clean_key("OPENROUTER_API_KEY")
+PAYPAL_ID = clean_key("PAYPAL_CLIENT_ID")
 
-if not API_KEY or not PAYPAL_ID:
-    st.error("⚠️ خطأ أمني: أحد المفاتيح مفقود من الخزنة.")
+if not API_KEY or "sk-or-v1" not in API_KEY:
+    st.error("⚠️ خطأ في مفتاح الذكاء الاصطناعي: يرجى التأكد من وضعه بشكل صحيح في الخزنة.")
     st.stop()
 
 # 5. إدارة المحادثة والربح
@@ -67,32 +66,49 @@ if st.session_state.msg_count < 5 or st.session_state.is_paid:
         with st.chat_message("user"): st.markdown(prompt)
         
         with st.chat_message("assistant"):
-            headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json", "HTTP-Referer": share_url}
-            payload = {"model": "google/gemini-2.0-flash-001", "messages": [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]}
+            # رؤوس الطلب المحدثة لضمان القبول العالمي
+            headers = {
+                "Authorization": f"Bearer {API_KEY}",
+                "Content-Type": "application/json",
+                "X-Title": "Shaheen Chat Official"
+            }
+            payload = {
+                "model": "google/gemini-2.0-flash-001", 
+                "messages": [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
+            }
             try:
-                response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, data=json.dumps(payload), timeout=45)
+                # محاولة الاتصال مع مهلة زمنية كافية
+                response = requests.post(
+                    "https://openrouter.ai/api/v1/chat/completions", 
+                    headers=headers, 
+                    data=json.dumps(payload), 
+                    timeout=30
+                )
                 if response.status_code == 200:
-                    res = response.json()['choices'][0]['message']['content']
-                    st.markdown(res)
-                    st.session_state.messages.append({"role": "assistant", "content": res})
+                    res_data = response.json()
+                    res_text = res_data['choices'][0]['message']['content']
+                    st.markdown(res_text)
+                    st.session_state.messages.append({"role": "assistant", "content": res_text})
                 else:
-                    st.error(f"تنبيه تقني: يرجى مراجعة الرصيد في OpenRouter. (Error {response.status_code})")
-            except: st.error("عطل اتصال، يرجى المحاولة لاحقاً.")
+                    st.error(f"تنبيه تقني ({response.status_code}): يرجى التأكد من شحن الرصيد في OpenRouter.")
+            except Exception as e:
+                st.error("حدث عطل مؤقت في الشبكة العالمية، يرجى تحديث الصفحة والمحاولة.")
 else:
     st.warning("⚠️ انتهت المحاولات المجانية. استمر بـ 12 ريال قطري فقط.")
-    paypal_html = f"""
-    <div id="paypal-button-container"></div>
-    <script src="https://www.paypal.com/sdk/js?client-id={PAYPAL_ID}&currency=USD"></script>
-    <script>
-        paypal.Buttons({{
-            createOrder: function(data, actions) {{ return actions.order.create({{ purchase_units: [{{ amount: {{ value: '3.30' }} }}] }}); }},
-            onApprove: function(data, actions) {{ 
-                return actions.order.capture().then(function(details) {{ 
-                    alert('تم الدفع بنجاح! سيتم فتح الدردشة الآن.');
-                    window.parent.postMessage({{type: 'PAYMENT_SUCCESS'}}, '*');
-                }}); 
-            }}
-        }}).render('#paypal-button-container');
-    </script>
-    """
-    st.components.v1.html(paypal_html, height=350)
+    if PAYPAL_ID:
+        paypal_html = f"""
+        <div id="paypal-button-container"></div>
+        <script src="https://www.paypal.com/sdk/js?client-id={PAYPAL_ID}&currency=USD"></script>
+        <script>
+            paypal.Buttons({{
+                createOrder: function(data, actions) {{ return actions.order.create({{ purchase_units: [{{ amount: {{ value: '3.30' }} }}] }}); }},
+                onApprove: function(data, actions) {{ 
+                    return actions.order.capture().then(function(details) {{ 
+                        alert('تم الدفع بنجاح! سيتم فتح الدردشة الآن.');
+                        window.parent.postMessage({{type: 'PAYMENT_SUCCESS'}}, '*');
+                    }}); 
+                }}
+            }}).render('#paypal-button-container');
+        </script>
+        """
+        st.components.v1.html(paypal_html, height=350)
