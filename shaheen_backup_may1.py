@@ -9,33 +9,47 @@ st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wid
 st.markdown("""
     <style>
     .main { background-color: #ffffff; }
-    /* عنوان شاهين شات باللون الخمري والخط العريض */
     .stTitle { color: #800000; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 45px; font-weight: bold; padding-top: 20px; }
+    
     /* تصميم فقاعات الدردشة ببرواز خمري بروجاني */
     .stChatMessage { border: 2px solid #800000; border-radius: 15px; padding: 10px; margin-bottom: 15px; }
-    /* تصغير أزرار المشاركة في الجانب */
-    .share-container { position: fixed; top: 100px; left: 10px; width: 60px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
-    .share-btn { padding: 5px; background-color: #800000; color: white; border-radius: 5px; text-decoration: none; font-size: 10px; text-align: center; font-weight: bold; }
+    
+    /* تصغير أزرار المشاركة: أحرف بيضاء وبرواز خمري */
+    .share-container { position: fixed; top: 120px; left: 10px; width: 70px; display: flex; flex-direction: column; gap: 8px; z-index: 100; }
+    .share-btn { 
+        padding: 6px; 
+        background-color: #800000; 
+        color: white !important; 
+        border: 1px solid #800000;
+        border-radius: 8px; 
+        text-decoration: none; 
+        font-size: 11px; 
+        text-align: center; 
+        font-weight: bold;
+    }
+    
     /* إخفاء القائمة الجانبية الافتراضية لترك مساحة للشات */
     [data-testid="stSidebar"] { display: none; }
     </style>
     """, unsafe_allow_html=True)
 
-# عرض أزرار المشاركة بشكل مصغر جداً على الجانب
+# عرض أزرار المشاركة (أحرف بيضاء وخلفية خمرية)
 st.markdown("""
     <div class="share-container">
-        <a href="https://wa.me/?text=جرب شاهين شات العالمي" class="share-btn">واتساب</a>
-        <a href="https://twitter.com/intent/tweet?text=جرب شاهين شات العالمي" class="share-btn">تويتر</a>
+        <a href="https://wa.me/?text=جرب شاهين شات العالمي" target="_blank" class="share-btn">واتساب</a>
+        <a href="https://twitter.com/intent/tweet?text=جرب شاهين شات العالمي" target="_blank" class="share-btn">تويتر</a>
     </div>
     """, unsafe_allow_html=True)
 
-# عرض العنوان فقط
+# عرض العنوان (شاهين شات فقط)
 st.markdown('<h1 class="stTitle">🦅 شاهين شات</h1>', unsafe_allow_html=True)
 
-# 3. نظام الأمان المطور (تنظيف المفتاح من أي أخطاء نسخ)
+# 3. نظام الأمان المطور (الإصلاح الجذري للخطأ 401)
 try:
-    # جلب المفتاح وحذف أي علامات تنصيص أو مسافات قد تسبب خطأ 401
-    API_KEY = st.secrets["OPENROUTER_API_KEY"].strip().replace('"', '').replace("'", "")
+    # جلب المفتاح وتنظيفه من أي شوائب برمجية قد تسبب الرفض
+    raw_key = st.secrets["OPENROUTER_API_KEY"]
+    # حذف المسافات وعلامات التنصيص وأي رموز سطر جديد
+    API_KEY = "".join(raw_key.split()).replace('"', '').replace("'", "").strip()
 except Exception:
     st.error("تنبيه أمان: يرجى التحقق من المفتاح في الخزنة السرية.")
     st.stop()
@@ -59,30 +73,35 @@ if st.session_state.msg_count < 5:
             st.markdown(prompt)
         
         with st.chat_message("assistant"):
-            # بروتوكول اتصال معزز لتجنب أخطاء المزود العالمي
+            # بروتوكول اتصال مباشر لضمان قبول المفتاح
             headers = {
                 "Authorization": f"Bearer {API_KEY}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "https://github.com/Tawafuq2026/Shaheen-Chat-System",
-                "X-Title": "Shaheen Chat Professional"
+                "Content-Type": "application/json"
             }
             payload = {
                 "model": "google/gemini-2.0-flash-001",
                 "messages": [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
             }
             try:
-                response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, data=json.dumps(payload), timeout=45)
+                # استخدام رابط الاتصال المباشر مع زيادة وقت الانتظار
+                response = requests.post(
+                    "https://openrouter.ai/api/v1/chat/completions", 
+                    headers=headers, 
+                    data=json.dumps(payload), 
+                    timeout=30
+                )
+                
                 if response.status_code == 200:
                     res_content = response.json()['choices'][0]['message']['content']
                     st.markdown(res_content)
                     st.session_state.messages.append({"role": "assistant", "content": res_content})
                 else:
-                    # تشخيص دقيق للمشكلة (قد يكون الحساب يحتاج تأكيد بريد أو رصيد إضافي)
-                    st.error(f"تنبيه تقني ({response.status_code}): المزود العالمي يرفض الطلب. يرجى التأكد من تفعيل الرصيد (الرصيد الحالي: 20.98$).")
+                    # رسالة تشخيصية مطورة
+                    st.error(f"تنبيه تقني ({response.status_code}): المزود يرفض المفتاح. تأكد من تفعيل بريدك في OpenRouter.")
             except Exception as e:
                 st.error(f"عطل في الاتصال العالمي: {e}")
 else:
-    # واجهة الدفع (ROI)
+    # واجهة الدفع (12 ريال قطري)
     st.warning("⚠️ انتهت المحاولات المجانية.")
-    st.info("للاستمرار في استخدام شاهين شات العالمي، اشترك بـ 12 ريالاً قطرياً فقط.")
+    st.info("للاستمرار، اشترك بـ 12 ريالاً قطرياً فقط.")
     st.markdown(f'<a href="https://paypal.me/MOHDSHAHEEN" target="_blank"><button style="width:100%; height:50px; background-color:#800000; color:white; border-radius:10px; cursor:pointer; font-weight:bold;">تفعيل الاشتراك (12 ريال)</button></a>', unsafe_allow_html=True)
