@@ -3,10 +3,10 @@ import requests
 import json
 import os
 
-# 1. إعدادات الهوية والواجهة العالمية
+# 1. إعدادات الواجهة والهوية الملكية
 st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wide")
 
-# 2. التنسيق الملكي الاحترافي
+# 2. التصميم الاحترافي وتنسيق اليمين
 st.markdown("""
     <style>
     .main .block-container { padding-left: 20% !important; padding-right: 20% !important; }
@@ -20,13 +20,14 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. بناء الواجهة (الجهة اليمنى)
+# 3. بناء الهوية البصرية (أقصى اليمين)
 st.markdown('<div class="header-container">', unsafe_allow_html=True)
-logo_file = "شاهين.jpeg"
+logo_file = "شاهين.jpeg" # استخدام ملف الشعار الخاص بك
 if os.path.exists(logo_file):
     st.image(logo_file, width=120)
 st.markdown('<h1 class="stTitle">شاهين شات</h1>', unsafe_allow_html=True)
 
+# أزرار التواصل الاجتماعي تحت العنوان
 share_url = "https://shaheen-chat-system.streamlit.app"
 st.markdown(f"""
     <div class="social-btns-container">
@@ -37,23 +38,24 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 4. جلب المفاتيح بأمان (حل مشكلة KeyError)
+# 4. جلب المفاتيح من الخزنة مع معالجة الأخطاء
 API_KEY = st.secrets.get("OPENROUTER_API_KEY", "").strip()
 PAYPAL_ID = st.secrets.get("PAYPAL_CLIENT_ID", "").strip()
 
 if not API_KEY:
-    st.error("⚠️ تنبيه للأدمن: مفتاح الذكاء الاصطناعي غير مفعل في الخزنة.")
+    st.error("⚠️ تنبيه للأدمن: يرجى التأكد من إضافة OPENROUTER_API_KEY في الخزنة (Secrets).")
     st.stop()
 
-# 5. إدارة المحادثة والعداد
+# 5. إدارة المحادثة والربح
 if "messages" not in st.session_state: st.session_state.messages = []
 if "msg_count" not in st.session_state: st.session_state.msg_count = 0
 if "is_paid" not in st.session_state: st.session_state.is_paid = False
 
+# عرض سجل الدردشة
 for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
-# 6. منطق التشغيل والربح
+# 6. منطق التشغيل والربح التلقائي
 if st.session_state.msg_count < 5 or st.session_state.is_paid:
     if prompt := st.chat_input("تحدث مع شاهين العالمي..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -68,8 +70,10 @@ if st.session_state.msg_count < 5 or st.session_state.is_paid:
                 res = response.json()['choices'][0]['message']['content']
                 st.markdown(res)
                 st.session_state.messages.append({"role": "assistant", "content": res})
-            except: st.error("عطل اتصال، يرجى المحاولة لاحقاً.")
+            except Exception:
+                st.error("عطل اتصال، يرجى المحاولة لاحقاً.")
 else:
+    # واجهة الدفع الذكية
     st.warning("⚠️ انتهت المحاولات المجانية. استمر بـ 12 ريال قطري فقط.")
     if PAYPAL_ID:
         paypal_html = f"""
@@ -78,10 +82,14 @@ else:
         <script>
             paypal.Buttons({{
                 createOrder: function(data, actions) {{ return actions.order.create({{ purchase_units: [{{ amount: {{ value: '3.30' }} }}] }}); }},
-                onApprove: function(data, actions) {{ return actions.order.capture().then(function(details) {{ window.parent.postMessage({{type: 'PAYMENT_SUCCESS'}}, '*'); }}); }}
+                onApprove: function(data, actions) {{ 
+                    return actions.order.capture().then(function(details) {{ 
+                        window.parent.postMessage({{type: 'PAYMENT_SUCCESS'}}, '*'); 
+                    }}); 
+                }}
             }}).render('#paypal-button-container');
         </script>
         """
         st.components.v1.html(paypal_html, height=300)
     else:
-        st.error("يرجى ربط PayPal لبدء استقبال الدفع.")
+        st.error("بوابة الدفع غير مهيأة، يرجى التواصل مع الإدارة.")
