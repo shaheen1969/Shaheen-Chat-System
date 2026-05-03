@@ -1,98 +1,109 @@
 import streamlit as st
-import requests
-import json
-import os
+import base64
 
-# 1. إعدادات الهوية والواجهة
-st.set_page_config(page_title="شاهين شات", page_icon="🦅", layout="wide")
+# 1. إعدادات المنصة العالمية - إخفاء القوائم غير الضرورية للزوار
+st.set_page_config(
+    page_title="ShaheenChat | Global AI Platform", 
+    layout="wide", 
+    initial_sidebar_state="expanded"
+)
 
-# 2. التنسيق الاحترافي (برواز رقيق + هوية يمين)
-st.markdown("""
-    <style>
-    .main .block-container { padding-left: 20% !important; padding-right: 20% !important; }
-    .header-container { display: flex; flex-direction: column; align-items: flex-end; width: 100%; margin-bottom: 25px; }
-    .stTitle { color: #000000 !important; font-family: 'Segoe UI', sans-serif; font-size: 34px; font-weight: bold; text-align: right; }
-    .social-btns-container { display: flex; flex-direction: row-reverse; gap: 10px; margin-top: 10px; }
-    .social-btn { padding: 5px 12px; background-color: #ffffff; color: #000000 !important; border: 1px solid #800000; border-radius: 6px; text-decoration: none !important; font-size: 11px; font-weight: bold; }
-    .stChatMessage { border: 1.5px solid #800000 !important; border-radius: 12px; background-color: #ffffff !important; }
-    .stChatInputContainer { border: 1.5px solid #800000 !important; border-radius: 10px; }
-    [data-testid="stSidebar"] { display: none; }
-    </style>
-    """, unsafe_allow_html=True)
+# تقنية الحقن البرمجي لضمان ثبات الشعار ومنع ظهور الأيقونات الافتراضية
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except Exception:
+        return None
 
-# 3. عرض الهوية (الجهة اليمنى)
-st.markdown('<div class="header-container">', unsafe_allow_html=True)
-logo_file = "شاهين.jpeg"
-if os.path.exists(logo_file):
-    st.image(logo_file, width=110)
-st.markdown('<h1 class="stTitle">شاهين شات</h1>', unsafe_allow_html=True)
+# تحميل الشعار الرسمي (تأكد أن الملف باسم logo.jpg في مستودع GitHub الخاص بك)
+img_data = get_base64_image("logo.jpg")
+logo_html = f"data:image/png;base64,{img_data}" if img_data else None
 
-share_url = "https://shaheen-chat-system.streamlit.app"
-st.markdown(f"""
-    <div class="social-btns-container">
-        <a href="https://twitter.com/intent/tweet?url={share_url}" target="_blank" class="social-btn">منصة X</a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u={share_url}" target="_blank" class="social-btn">فيسبوك</a>
-        <a href="https://www.instagram.com/" target="_blank" class="social-btn">انستغرام</a>
-    </div>
-    """, unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+# إدارة عداد الاستخدام (7 محاولات مجانية)
+if 'usage_count' not in st.session_state:
+    st.session_state.usage_count = 0
 
-# 4. جلب المفاتيح من الخزنة
-API_KEY = st.secrets.get("OPENROUTER_API_KEY", "").strip().replace('"', '')
-PAYPAL_ID = st.secrets.get("PAYPAL_CLIENT_ID", "").strip().replace('"', '')
+# --- 2. القائمة الجانبية الاحترافية ---
+with st.sidebar:
+    if logo_html:
+        st.image(logo_html, width=180)
+    st.title("شاهين شات")
+    st.write("---")
+    
+    # القائمة المحدثة بالقسم الجديد "تطبيق توافق"
+    menu = st.radio("القائمة الرئيسية:", 
+                    ["🤖 الدردشة الذكية", 
+                     "📝 المدونة العالمية (Blog)", 
+                     "💎 باقات الاشتراك", 
+                     "🤝 تطبيق توافق (قريباً)", 
+                     "📞 تواصل معنا"])
+    
+    st.write("---")
+    # مساحة إعلانية احترافية ثابتة
+    st.markdown("### 📢 مساحة إعلانية")
+    st.info("مساحة مخصصة للابتكارات والشركات التقنية العالمية.")
+    st.write("للتواصل: tawafuq.app2026@gmail.com")
 
-# 5. إدارة الحالة (Session State)
-if "messages" not in st.session_state: st.session_state.messages = []
-if "msg_count" not in st.session_state: st.session_state.msg_count = 0
-if "is_pro_paid" not in st.session_state: st.session_state.is_pro_paid = False
-if "pro_trial_used" not in st.session_state: st.session_state.pro_trial_used = False
+# --- 3. قسم الدردشة (استبدال الروبوت الأصفر بشعارك الجديد) ---
+if menu == "🤖 الدردشة الذكية":
+    st.header("شاهين شات | ShaheenChat")
+    
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]): st.markdown(message["content"])
+    # عرض المحادثة (أيقونة المساعد هي شعارك الرسمي حصراً)
+    for message in st.session_state.messages:
+        avatar_img = logo_html if message["role"] == "assistant" else None
+        with st.chat_message(message["role"], avatar=avatar_img):
+            st.markdown(message["content"])
 
-# 6. منطق التمييز بين الطلب العادي والاحترافي
-professional_keywords = ["جدول", "إكسل", "excel", "حلل", "صورة", "صمم", "دراسة جدوى", "تقرير مالي"]
+    if prompt := st.chat_input("كيف يمكن لـ شاهين شات مساعدتك اليوم؟"):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
-def is_pro_request(text):
-    return any(word in text.lower() for word in professional_keywords)
-
-# 7. محرك التشغيل
-if prompt := st.chat_input("تحدث مع شاهين العالمي..."):
-    # تجاوز الأدمن
-    if prompt == "SHAHEEN_ADMIN_2026":
-        st.session_state.is_pro_paid = True
-        st.success("أهلاً بك يا سيد محمد.. تم تفعيل وضع الإدارة المطلق.")
-    else:
-        is_pro = is_pro_request(prompt)
-        
-        # التحقق من شروط الدفع للخدمات الاحترافية (15 ريال)
-        if is_pro and st.session_state.pro_trial_used and not st.session_state.is_pro_paid:
-            st.warning("⚠️ هذه الخدمة ضمن 'الباقة الاحترافية'. لقد استنفدت محاولتك المجانية.")
-            st.markdown(f'<a href="https://paypal.me/MOHDSHAHEEN/15" target="_blank"><button style="width:100%; height:50px; background-color:#800000; color:white; border-radius:10px; cursor:pointer; font-weight:bold; border:none;">تفعيل الباقة الاحترافية (15 ريال قطري)</button></a>', unsafe_allow_html=True)
-        
-        # التحقق من شروط المحادثات العادية (10 رسائل مجانية)
-        elif not is_pro and st.session_state.msg_count >= 10 and not st.session_state.is_pro_paid:
-            st.warning("⚠️ انتهت المحاولات المجانية للدردشة العادية.")
-            st.markdown(f'<a href="https://paypal.me/MOHDSHAHEEN/12" target="_blank"><button style="width:100%; height:50px; background-color:#000000; color:white; border-radius:10px; cursor:pointer; font-weight:bold; border:none;">استمرار الدردشة العادية (12 ريال قطري)</button></a>', unsafe_allow_html=True)
-        
+        if st.session_state.usage_count < 7:
+            with st.chat_message("assistant", avatar=logo_html):
+                response = f"أهلاً بك في شاهين شات. أنا محركك الذكي للإبداع والابتكار العالمي. كيف يمكنني مساعدتك؟"
+                st.markdown(response)
+                st.session_state.messages.append({"role": "assistant", "content": response})
+                st.session_state.usage_count += 1
         else:
-            # تنفيذ الطلب
-            if is_pro and not st.session_state.pro_trial_used:
-                st.session_state.pro_trial_used = True
-                st.info("🎁 شاهين يقدم لك أول خدمة احترافية مجاناً.. جاري المعالجة...")
-            
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            if not is_pro: st.session_state.msg_count += 1
-            
-            with st.chat_message("user"): st.markdown(prompt)
-            
-            with st.chat_message("assistant"):
-                headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
-                payload = {"model": "google/gemini-2.0-flash-001", "messages": [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]}
-                try:
-                    response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload, timeout=40)
-                    res = response.json()['choices'][0]['message']['content']
-                    st.markdown(res)
-                    st.session_state.messages.append({"role": "assistant", "content": res})
-                except:
-                    st.error("عطل مؤقت في الاتصال، يرجى المحاولة.")
+            with st.chat_message("assistant", avatar=logo_html):
+                st.error("⚠️ استنفدت المحاولات المجانية لهذا اليوم.")
+                st.info("يرجى مراجعة 'باقات الاشتراك' للوصول غير المحدود.")
+
+# --- 4. قسم تطبيق توافق (قريباً) ---
+elif menu == "🤝 تطبيق توافق (قريباً)":
+    st.header("🤝 تطبيق توافق")
+    if logo_html:
+        st.image(logo_html, width=120)
+    st.markdown("### **قريباً جداً**")
+    st.write("رؤيتنا القادمة لتعزيز الترابط والنمو المؤسسي الذكي.")
+
+# --- 5. تنظيم المساحات (المدونة والاشتراكات) ---
+elif menu == "📝 المدونة العالمية (Blog)":
+    st.header("📚 مدونة شاهين شات (Insights)")
+    st.write("استكشف آفاق التكنولوجيا من منظور عالمي.")
+    st.button("تصفح المقالات")
+
+elif menu == "💎 باقات الاشتراك":
+    st.header("💎 باقات التميز")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.subheader("باقة الأفراد")
+        st.write("• وصول غير محدود • دعم فني • توليد صور")
+        st.button("اشترك الآن - $9")
+    with c2:
+        st.subheader("باقة الأعمال")
+        st.write("• حلول مخصصة • تشفير متقدم • API")
+        st.button("طلب تسعير")
+
+elif menu == "📞 تواصل معنا":
+    st.header("🌐 تواصل عالمي")
+    st.markdown(f"📩 **البريد الإلكتروني المعتمد:** [tawafuq.app2026@gmail.com](mailto:tawafuq.app2026@gmail.com)")
+
+# --- 6. التذييل العالمي ---
+st.write("---")
+st.caption("ShaheenChat.com © 2026 | بوابة الذكاء الاصطناعي والابتكار الرقمي العالمي")
