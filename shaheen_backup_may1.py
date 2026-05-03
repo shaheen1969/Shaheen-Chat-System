@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShaheenChat | Global AI Platform</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- القائمة الجانبية -->
     <aside class="sidebar">
         <div class="logo-container">
             <img src="logo.jpg" alt="Shaheen Logo" class="main-logo">
@@ -25,23 +23,20 @@
             </ul>
         </nav>
         <div class="social-icons">
-            <a href="#"><i class="fab fa-whatsapp"></i></a>
-            <a href="#"><i class="fab fa-telegram"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/yournumber"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://t.me/yourusername"><i class="fab fa-telegram"></i></a>
+            <a href="https://instagram.com/yourprofile"><i class="fab fa-instagram"></i></a>
             <a href="mailto:tawafuq.app2026@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
     </aside>
 
-    <!-- واجهة المحادثة -->
     <main class="chat-container">
         <header class="chat-header">
             <img src="logo.jpg" alt="Hawk" class="header-logo">
             <h1>كيف يمكنني مساعدتك اليوم؟</h1>
         </header>
 
-        <div id="chat-box" class="chat-box">
-            <!-- الرسائل ستظهر هنا -->
-        </div>
+        <div id="chat-box" class="chat-box"></div>
 
         <div class="input-area">
             <input type="text" id="user-input" placeholder="اكتب رسالتك هنا...">
@@ -49,7 +44,7 @@
         </div>
 
         <footer>
-            <p>ShaheenChat.com © 2026 | <a href="#">سياسة الخصوصية</a></p>
+            <p>ShaheenChat.com © 2026 | بوابة الابتكار العالمي</p>
         </footer>
     </main>
 
