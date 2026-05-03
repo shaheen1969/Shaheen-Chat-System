@@ -1,5 +1,5 @@
 import streamlit as st
-
+# Update 2026
 # 1. إعدادات الصفحة الاحترافية
 st.set_page_config(page_title="ShaheenChat | AI Business Insights", layout="wide", page_icon="🦅")
 
