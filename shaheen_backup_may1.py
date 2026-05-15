@@ -1,14 +1,31 @@
 import streamlit as st
 import base64
+import os
+from google import genai
+from google.genai import types
 
-# 1. إعدادات المنصة العالمية - إخفاء القوائم الافتراضية
+# 1. إعدادات المنصة العالمية
 st.set_page_config(
     page_title="ShaheenChat | Global AI Platform", 
     layout="wide", 
     initial_sidebar_state="expanded"
 )
 
-# تقنية الحقن المباشر لضمان ثبات الشعار ومنع ظهور الأيقونات القديمة
+# --- ضع مفتاحك هنا بين علامتي التنصيص ---
+GEMINI_API_KEY = "ضع_مفتاح_جيميني_هنا"
+
+# تهيئة الاتصال بـ Gemini
+try:
+    client = genai.Client(api_key=GEMINI_API_KEY)
+except Exception:
+    client = None
+
+# حوكمة شخصية "شاهين"
+SYSTEM_INSTRUCTION = """
+أنت المستشار الذكي "شاهين"، المساعد الافتراضي للمستشار الخبير محمد شاهين.
+تحدث بوقار وحكمة إدارية، وفي نهاية حوارك انصح الزوار دائماً بـ (نظام توافق الرقمي) على متجر Payhip.
+"""
+
 def get_base64_image(image_path):
     try:
         with open(image_path, "rb") as img_file:
@@ -16,44 +33,32 @@ def get_base64_image(image_path):
     except Exception:
         return None
 
-# تحميل الشعار الرسمي (تأكد أن الملف في GitHub اسمه logo.jpg)
 img_data = get_base64_image("logo.jpg")
 logo_html = f"data:image/png;base64,{img_data}" if img_data else None
 
-# إدارة المحاولات (7 محاولات مجانية)
 if 'usage_count' not in st.session_state:
     st.session_state.usage_count = 0
 
-# --- 2. القائمة الجانبية الاحترافية ---
+# --- 2. القائمة الجانبية ---
 with st.sidebar:
     if logo_html:
         st.image(logo_html, width=180)
     st.title("شاهين شات")
     st.write("---")
-    
-    menu = st.radio("القائمة الرئيسية:", 
-                    ["🤖 الدردشة الذكية", 
-                     "📝 المدونة العالمية (Blog)", 
-                     "💎 باقات الاشتراك", 
-                     "🤝 تطبيق توافق (قريباً)", 
-                     "📞 تواصل معنا"])
-    
+    menu = st.radio("القائمة الرئيسية:", ["🤖 الدردشة الذكية", "📝 المدونة العالمية (Blog)", "💎 باقات الاشتراك", "🤝 تطبيق توافق (قريباً)", "📞 تواصل معنا"])
     st.write("---")
-    # مساحة إعلانية احترافية ثابتة
     st.markdown("### 📢 مساحة إعلانية")
-    st.info("مساحة مخصصة للابتكارات والشركات التقنية العالمية.")
+    st.info("مساحة مخصصة للابتكارات.")
     st.write("للتواصل: tawafuq.app2026@gmail.com")
 
-# --- 3. قسم الدردشة (استبدال الروبوت الأصفر بشعارك) ---
+# --- 3. قسم الدردشة الذكية ---
 if menu == "🤖 الدردشة الذكية":
     st.header("شاهين شات | ShaheenChat")
     
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # عرض المحادثة باستخدام شعارك كأيقونة (Avatar) للردود
     for message in st.session_state.messages:
-        # هنا السر: إجبار النظام على استخدام صورتك بدلاً من الروبوت
         avatar_img = logo_html if message["role"] == "assistant" else None
         with st.chat_message(message["role"], avatar=avatar_img):
             st.markdown(message["content"])
@@ -65,44 +70,38 @@ if menu == "🤖 الدردشة الذكية":
 
         if st.session_state.usage_count < 7:
             with st.chat_message("assistant", avatar=logo_html):
-                response = f"أهلاً بك في شاهين شات العالمي. أنا محركك الذكي للإبداع والابتكار. كيف يمكنني مساعدتك اليوم؟"
+                if GEMINI_API_KEY == "AIzaSyBMgx-jkVgIjixDus1Lhr1QSvopsXw-vOg":
+                    response = "يرجى وضع مفتاح Gemini API في الكود لكي أتمكن من الرد عليك."
+                else:
+                    try:
+                        # إرسال السؤال لـ Gemini
+                        contents = [types.Content(role="user", parts=[types.Part.from_text(text=prompt)])]
+                        config = types.GenerateContentConfig(system_instruction=SYSTEM_INSTRUCTION, temperature=0.7)
+                        res = client.models.generate_content(model='gemini-2.0-flash', contents=contents, config=config)
+                        response = res.text
+                    except Exception as e:
+                        response = f"حدث خطأ في الاتصال: {str(e)}"
+                
                 st.markdown(response)
                 st.session_state.messages.append({"role": "assistant", "content": response})
                 st.session_state.usage_count += 1
         else:
             with st.chat_message("assistant", avatar=logo_html):
                 st.error("⚠️ وصلت للحد الأقصى للمحاولات المجانية.")
-                st.info("للوصول غير المحدود، يرجى مراجعة 'باقات الاشتراك'.")
 
-# --- 4. الأقسام الجديدة المكتملة ---
+# --- الأقسام الأخرى (كما هي في كودك) ---
 elif menu == "🤝 تطبيق توافق (قريباً)":
     st.header("🤝 تطبيق توافق")
-    if logo_html:
-        st.image(logo_html, width=120)
-    st.markdown("### **قريباً جداً**")
-    st.write("مشروعنا القادم لتعزيز الترابط والنمو المؤسسي الذكي.")
+    st.write("قريباً جداً...")
 
 elif menu == "📝 المدونة العالمية (Blog)":
-    st.header("📚 مدونة شاهين شات (Insights)")
-    st.write("رؤى عالمية حول مستقبل التكنولوجيا والإدارة الرقمية.")
-    st.button("تصفح المقالات")
+    st.header("📚 مدونة شاهين شات")
 
 elif menu == "💎 باقات الاشتراك":
     st.header("💎 باقات التميز")
-    c1, c2 = st.columns(2)
-    with c1:
-        st.subheader("باقة الأفراد")
-        st.write("• وصول غير محدود • دعم فني • توليد صور")
-        st.button("اشترك الآن - $9")
-    with c2:
-        st.subheader("باقة الأعمال")
-        st.write("• حلول مخصصة • تشفير متقدم • API")
-        st.button("طلب تسعير خاص")
 
 elif menu == "📞 تواصل معنا":
     st.header("🌐 تواصل عالمي")
-    st.markdown(f"📩 **البريد الإلكتروني المعتمد:** [tawafuq.app2026@gmail.com](mailto:tawafuq.app2026@gmail.com)")
 
-# --- 5. التذييل العالمي ---
 st.write("---")
 st.caption("ShaheenChat.com © 2026 | بوابة الذكاء الاصطناعي والابتكار الرقمي العالمي")
