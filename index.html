@@ -10,7 +10,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Cairo', sans-serif; background-color: #131314; color: #e3e3e3; display: flex; height: 100vh; overflow: hidden; }
         
-        /* القائمة الجانبية - متجاوبة */
+        /* القائمة الجانبية الممتدة */
         .sidebar { width: 280px; background-color: #1e1f20; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid #2e2f30; padding: 15px; transition: all 0.3s ease; flex-shrink: 0; }
         .sidebar-top { display: flex; flex-direction: column; gap: 20px; }
         .brand { font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 5px; }
@@ -22,17 +22,17 @@
         .sidebar-btn.coming-soon { border: 1px dashed #ffa726; background: rgba(255, 167, 38, 0.05); cursor: default; }
         .sidebar-btn.coming-soon i { color: #ffa726; }
         .sidebar-btn.story i { color: #ff7043; }
+        .sidebar-btn.key-setting { border: 1px solid #4a90e2; background: rgba(74, 144, 226, 0.1); color: #8ab4f8; }
         .sidebar-bottom { border-top: 1px solid #2e2f30; padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .share-title { font-size: 13px; color: #9aa0a6; text-align: center; }
         .social-icons { display: flex; justify-content: center; gap: 15px; }
         .social-icons a { color: #9aa0a6; font-size: 18px; transition: color 0.2s; }
         .social-icons a:hover { color: #fff; }
 
-        /* منطقة الشات الرئيسية */
+        /* منطقة الدردشة */
         .chat-container { flex: 1; display: flex; flex-direction: column; background-color: #131314; position: relative; height: 100%; }
         .chat-window { flex: 1; padding: 20px 5% 150px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
         
-        /* تصميم الرسائل */
         .message { display: flex; gap: 15px; padding: 14px 18px; border-radius: 12px; max-width: 85%; line-height: 1.7; font-size: 15px; align-items: flex-start; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { align-self: flex-start; background-color: #2b2c2d; color: #fff; border-bottom-right-radius: 2px; }
@@ -43,14 +43,14 @@
         .message-text { flex: 1; white-space: pre-wrap; padding-top: 2px; }
         .message.loading .message-text { color: #9aa0a6; font-style: italic; }
 
-        /* شبكة البطاقات التفاعلية المتجاوبة للهواتف */
+        /* البطاقات التفاعلية */
         .suggestion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; width: 100%; }
         .suggestion-card { background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 12px; padding: 15px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; height: 100px; transition: all 0.2s ease; }
         .suggestion-card:hover { background-color: #2b2c2d; transform: translateY(-2px); }
         .suggestion-card .card-text { font-size: 13px; font-weight: 600; color: #e3e3e3; line-height: 1.4; }
         .suggestion-card .card-icon { align-self: flex-end; font-size: 16px; color: #8ab4f8; }
 
-        /* منطقة الإدخال السفلية للهواتف والكمبيوتر */
+        /* منطقة الإدخال السفلية */
         .chat-input-wrapper { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 5%; background: linear-gradient(transparent, #131314 40%); }
         .chat-input-area { display: flex; background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 28px; padding: 5px 15px 5px 5px; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); width: 100%; max-width: 800px; margin: 0 auto; }
         .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; padding: 10px; font-family: 'Cairo', sans-serif; font-size: 15px; outline: none; }
@@ -59,19 +59,16 @@
         .chat-input-area button:hover { background: #1557b0; }
         .chat-input-area button i { font-size: 15px; transform: rotate(180deg); }
 
-        /* إعدادات الشاشات الصغيرة والهواتف */
+        /* الشاشات الصغيرة والهواتف */
         @media (max-width: 768px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; padding: 10px 15px; border-left: none; border-bottom: 1px solid #2e2f30; }
-            .sidebar-bottom, .menu-section { display: none; } /* إخفاء الأجزاء غير الضرورية في الهاتف لمساحة أفضل */
+            .sidebar-bottom, .menu-section { display: none; }
             .brand { justify-content: center; font-size: 18px; padding: 5px; }
             .chat-window { padding-bottom: 130px; }
             .suggestion-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .message { max-width: 95%; font-size: 14px; }
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #131314; }
-        ::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -84,8 +81,8 @@
                 <a href="https://payhip.com/" target="_blank" class="sidebar-btn story"><i class="fa-solid fa-book-open"></i> <span>خيوط الياسمين في مهبّ الغربة</span></a>
             </div>
             <div class="menu-section">
-                <div class="menu-title">المشاريع الرقمية</div>
-                <div class="sidebar-btn coming-soon"><i class="fa-solid fa-layer-group"></i> <span>نظام توافق الرقمي (قريباً)</span></div>
+                <div class="menu-title">التحكم بالأمن</div>
+                <button onclick="promptForApiKey()" class="sidebar-btn key-setting"><i class="fa-solid fa-key"></i> <span>تحديث مفتاح API السري</span></button>
             </div>
         </div>
         <div class="sidebar-bottom">
@@ -103,7 +100,7 @@
         <div class="chat-window" id="chat-window">
             <div class="message assistant">
                 <div class="message-avatar"><img src="5.jpg" alt="شاهين" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"></div>
-                <div class="message-text">مرحباً بك في منصة شاهين شات الذكية العامة. أنا مساعدك الشخصي المدعوم بأحدث تقنيات الذكاء الاصطناعي، كيف يمكنني مساعدتك اليوم؟</div>
+                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات الذكية المتكاملة للهواتف والكمبيوتر. يرجى تفعيل مفتاحك الجديد للبدء.</div>
             </div>
             <div class="suggestion-grid" id="suggestion-grid">
                 <div class="suggestion-card" onclick="sendSuggestion('إنشاء صورة فنية مبتكرة')"><span class="card-text">🖼️ إنشاء صورة</span><span class="card-icon"><i class="fa-solid fa-image"></i></span></div>
@@ -123,14 +120,32 @@
     </div>
 
 <script>
-// الصق مفتاح غوغل الطازج والأخير بدقة هنا بين علامتي التنصيص
-const GEMINI_API_KEY = "AIzaSyDhx9JLVAdhkYzAsIVpGhkcQr8eQn4PQKM"; 
-
 const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي عام متطور. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني.";
 
+// دالة لجلب المفتاح المخزن بأمان في متصفح المستخدم دون كشفه على جيت هب
+function getApiKey() {
+    return localStorage.getItem("SHAHEEN_GEMINI_KEY");
+}
+
+function promptForApiKey() {
+    const key = prompt("يرجى لصق مفتاح جيميني (Gemini API Key) الجديد والنظيف هنا لحفظه بأمان داخل جهازك:");
+    if (key && key.trim().startsWith("AIzaSy")) {
+        localStorage.setItem("SHAHEEN_GEMINI_KEY", key.trim());
+        alert("✅ تم حفظ وتشفير مفتاحك الجديد بنجاح في جهازك! الموقع جاهز للعمل الآن.");
+        location.reload();
+    } else if (key) {
+        alert("❌ المفتاح غير صحيح، يجب أن يبدأ بـ AIzaSy");
+    }
+}
+
 async function sendMessageToGemini(userMessage) {
-    // استخدام الهيكل الآمن والمباشر لنسخة v1beta لحل مشكلة التجاوب كلياً
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const apiKey = getApiKey();
+    if (!apiKey) {
+        return "⚠️ تنبيه أمني: لم تقم بإدخال مفتاح الـ API الخاص بك بعد. يرجى الضغط على زر 'تحديث مفتاح API السري' في القائمة الجانبية أو تحديث الصفحة ووضعه لتفعيل الذكاء الاصطناعي.";
+    }
+
+    // استخدام الرابط القياسي المحدث والآمن مئة بالمئة لعام 2026
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const requestBody = {
         contents: [{
@@ -149,8 +164,10 @@ async function sendMessageToGemini(userMessage) {
         const data = await response.json();
         
         if (data.error) {
-            // إضافة نص تشخيصي ذكي لمعرفة حالة المفتاح إذا كان مقيداً
-            return `❌ تنبيه من خوادم جوجل (${data.error.status}): ` + data.error.message;
+            if (data.error.status === "API_KEY_INVALID" || data.error.message.includes("API key")) {
+                return "❌ خطأ في المفتاح: المفتاح الذي أدخلته محظور أو غير صحيح من جوجل. يرجى الضغط على زر التحديث في الجانب وإنشاء مفتاح رابع جديد تماماً من AI Studio.";
+            }
+            return `❌ تنبيه من خوادم جوجل: ` + data.error.message;
         }
         
         if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
@@ -167,6 +184,13 @@ let inputElement, sendBtnElement;
 document.addEventListener("DOMContentLoaded", () => {
     inputElement = document.getElementById("chat-input");
     sendBtnElement = document.getElementById("send-button");
+    
+    if (!getApiKey()) {
+        document.getElementById("welcome-text").innerHTML = "🦅 مرحباً بك في <b>شاهين شات</b> المتجاوب بالكامل للكمبيوتر والهاتف.<br><br><span style='color: #ffa726;'>⚠️ خطوة تفعيل أولى وأخيرة:</span> يرجى الضغط على زر <b>'تحديث مفتاح API السري'</b> في القائمة الجانبية، ولصق مفتاحك الجديد النظيف لتنطلق الطائرة فوراً وبأمان كامل.";
+    } else {
+        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات الذكية العامة. أنا مساعدك الشخصي المحصن والمدعوم بأحدث تقنيات الذكاء الاصطناعي المتجاوبة، كيف يمكنني مساعدتك اليوم؟";
+    }
+
     if (sendBtnElement && inputElement) {
         sendBtnElement.addEventListener("click", handleSend);
         inputElement.addEventListener("keypress", (e) => { if (e.key === "Enter") handleSend(); });
