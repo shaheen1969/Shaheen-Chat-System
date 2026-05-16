@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شاهين شات | ShaheenChat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background-color: #131314; color: #e3e3e3; margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 280px; background-color: #1e1f20; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid #2e2f30; padding: 15px; }
+        .sidebar-top { display: flex; flex-direction: column; gap: 20px; }
+        .brand { font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 5px; }
+        .brand i { color: #4a90e2; }
+        .menu-section { display: flex; flex-direction: column; gap: 10px; }
+        .menu-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #757575; font-weight: bold; margin-top: 10px; }
+        .sidebar-btn { background: #2b2c2d; color: #e3e3e3; border: none; padding: 12px 15px; border-radius: 8px; text-align: right; font-family: 'Cairo', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 14px; transition: background 0.2s; }
+        .sidebar-btn:hover { background: #37393b; }
+        .sidebar-btn.coming-soon { border: 1px dashed #ffa726; background: rgba(255, 167, 38, 0.05); cursor: default; }
+        .sidebar-btn.coming-soon i { color: #ffa726; }
+        .sidebar-btn.story i { color: #ff7043; }
+        .sidebar-bottom { border-top: 1px solid #2e2f30; padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .share-title { font-size: 13px; color: #9aa0a6; text-align: center; }
+        .social-icons { display: flex; justify-content: center; gap: 15px; }
+        .social-icons a { color: #9aa0a6; font-size: 18px; transition: color 0.2s; }
+        .social-icons a:hover { color: #fff; }
+        .chat-container { flex: 1; display: flex; flex-direction: column; background-color: #131314; position: relative; }
+        .chat-window { flex: 1; padding: 30px 10% 150px 10%; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
+        .message { display: flex; gap: 15px; padding: 12px 18px; border-radius: 12px; max-width: 85%; line-height: 1.7; font-size: 16px; align-items: flex-start; }
+        .message.user { align-self: flex-start; background-color: #2b2c2d; color: #fff; }
+        .message.assistant { align-self: flex-end; background-color: transparent; color: #e3e3e3; width: 100%; max-width: 100%; }
+        .message-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; overflow: hidden; }
+        .message.user .message-avatar { background-color: #37393b; color: #8ab4f8; font-size: 18px; }
+        .message.assistant .message-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .message-text { flex: 1; white-space: pre-wrap; padding-top: 4px; }
+        .message.loading .message-text { color: #9aa0a6; font-style: italic; }
+        .suggestion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-top: 30px; width: 100%; }
+        .suggestion-card { background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 12px; padding: 20px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; height: 120px; transition: background-color 0.2s, transform 0.2s; }
+        .suggestion-card:hover { background-color: #2b2c2d; transform: translateY(-2px); }
+        .suggestion-card .card-text { font-size: 14px; font-weight: 600; color: #e3e3e3; line-height: 1.5; }
+        .suggestion-card .card-icon { align-self: flex-end; font-size: 20px; color: #8ab4f8; }
+        .chat-input-wrapper { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 10%; background: linear-gradient(transparent, #131314 30%); }
+        .chat-input-area { display: flex; background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 28px; padding: 6px 15px 6px 6px; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; padding: 12px; font-family: 'Cairo', sans-serif; font-size: 16px; outline: none; }
+        .chat-input-area input::placeholder { color: #9aa0a6; }
+        .chat-input-area button { background: #1a73e8; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.2s, transform 0.1s; }
+        .chat-input-area button:hover { background: #1557b0; transform: scale(1.05); }
+        .chat-input-area button i { font-size: 16px; transform: rotate(180deg); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #131314; }
+        ::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="brand"><i class="fa-solid fa-feather-pointed"></i> <span>شاهين شات</span></div>
+            <div class="menu-section">
+                <div class="menu-title">المؤلفات والقصص</div>
+                <a href="https://payhip.com/" target="_blank" class="sidebar-btn story"><i class="fa-solid fa-book-open"></i> <span>خيوط الياسمين في مهبّ الغربة</span></a>
+            </div>
+            <div class="menu-section">
+                <div class="menu-title">المشاريع الرقمية</div>
+                <div class="sidebar-btn coming-soon"><i class="fa-solid fa-layer-group"></i> <span>نظام توافق الرقمي (قريباً)</span></div>
+            </div>
+        </div>
+        <div class="sidebar-bottom">
+            <div class="share-title">مشاركة المنصة</div>
+            <div class="social-icons">
+                <a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://wa.me/" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-window" id="chat-window">
+            <div class="message assistant">
+                <div class="message-avatar"><img src="5.jpg" alt="شاهين" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"></div>
+                <div class="message-text">مرحباً بك في منصة شاهين شات الذكية العامة. أنا مساعدك الشخصي المدعوم بأحدث تقنيات الذكاء الاصطناعي، كيف يمكنني مساعدتك اليوم؟</div>
+            </div>
+            <div class="suggestion-grid" id="suggestion-grid">
+                <div class="suggestion-card" onclick="sendSuggestion('إنشاء صورة فنية مبتكرة')"><span class="card-text">إنشاء صورة</span><span class="card-icon"><i class="fa-solid fa-image"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('تأليف موسيقى ونغمات ملهمة')"><span class="card-text">إنشاء موسيقى</span><span class="card-icon"><i class="fa-solid fa-music"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('توليد مقطع فيديو ومقاطع تفاعلية')"><span class="card-text">أنشئ فيديو</span><span class="card-icon"><i class="fa-solid fa-video"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('كتابة مقال أو فكرة إبداعية')"><span class="card-text">كتابة أي شيء</span><span class="card-icon"><i class="fa-solid fa-pen-nib"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('ساعدني في تعلم مهارة أو موضوع جديد اليوم')"><span class="card-text">ساعِدني في التعلّم</span><span class="card-icon"><i class="fa-solid fa-graduation-cap"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('أفكار لتعزيز طاقتي وإنتاجيتي اليوم بنجاح')"><span class="card-text">عزِّز طاقتي وإنتاجيتي</span><span class="card-icon"><i class="fa-solid fa-bolt"></i></span></div>
+            </div>
+        </div>
+        <div class="chat-input-wrapper">
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="اسأل شاهين شات عن أي شيء...">
+                <button id="send-button"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ضع مفتاح الـ API الجديد والخاص بك هنا بدقة متناهية بين علامتي التنصيص
+const GEMINI_API_KEY = "AIzaSyDhx9JLVAdhkYzAsIVpGhkcQr8eQn4PQKM"; 
+
+const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي عام متطور. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني.";
+
+async function sendMessageToGemini(userMessage) {
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
+    const requestBody = {
+        contents: [{
+            role: "user",
+            parts: [{ text: SYSTEM_INSTRUCTION + "\n\nسؤال المستخدم: " + userMessage }]
+        }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 800 }
+    };
+
+    try {
+        const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(requestBody) });
+        const data = await response.json();
+        if (data.error) return "❌ تنبيه من خوادم جوجل: " + data.error.message;
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+            return data.candidates[0].content.parts[0].text;
+        } else {
+            return "مرحباً بك، تم معالجة الرسالة ولكن استجابة النص فارغة من المصدر.";
+        }
+    } catch (error) { return "❌ خطأ برمي في المتصفح: " + error.message; }
+}
+
+let inputElement, sendBtnElement;
+document.addEventListener("DOMContentLoaded", () => {
+    inputElement = document.getElementById("chat-input");
+    sendBtnElement = document.getElementById("send-button");
+    if (sendBtnElement && inputElement) {
+        sendBtnElement.addEventListener("click", handleSend);
+        inputElement.addEventListener("keypress", (e) => { if (e.key === "Enter") handleSend(); });
+    }
+});
+
+async function handleSend() {
+    const messageText = inputElement.value.trim();
+    if (!messageText) return;
+    const grid = document.getElementById("suggestion-grid");
+    if (grid) grid.style.display = "none";
+
+    appendMessage(messageText, "user", '<i class="fa-solid fa-user"></i>');
+    inputElement.value = "";
+    appendMessage("جاري التفكير وتحليل البيانات...", "loading", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/6134/6134346.png\'">');
+
+    const aiResponse = await sendMessageToGemini(messageText);
+    removeLoadingMessage();
+    appendMessage(aiResponse, "assistant", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'\'">');
+}
+
+function sendSuggestion(text) { if (inputElement) { inputElement.value = text; handleSend(); } }
+
+function appendMessage(text, sender, avatarContent) {
+    const chatWindow = document.getElementById("chat-window");
+    if (!chatWindow) return;
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `message ${sender}`;
+    if (sender === "loading") msgDiv.id = "gemini-loading";
+    msgDiv.innerHTML = `<div class="message-avatar">${avatarContent}</div><div class="message-text">${text}</div>`;
+    chatWindow.appendChild(msgDiv);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+function removeLoadingMessage() { const loadingDiv = document.getElementById("gemini-loading"); if (loadingDiv) loadingDiv.remove(); }
+</script>
+</body>
+</html>
