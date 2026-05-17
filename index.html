@@ -76,7 +76,7 @@
         .suggestion-card .card-text { font-size: 13px; font-weight: 600; color: #e3e3e3; line-height: 1.4; }
         .suggestion-card .card-icon { align-self: flex-end; font-size: 16px; color: #8ab4f8; }
 
-        /* منطقة الإدخال السفلية المرفوعة بدقة */
+        /* منطقة الإدخال السفلية المرفوعة بدقة فوق الكيبورد */
         .chat-input-wrapper { 
             position: absolute; 
             bottom: 0; 
@@ -93,7 +93,7 @@
             border-radius: 28px; 
             padding: 6px 15px 6px 6px; 
             align-items: center; 
-            box-shadow: 0 4px 15 rgba(0,0,0,0.5); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
             width: 100%; 
             max-width: 800px; 
             margin: 0 auto; 
@@ -104,7 +104,7 @@
         .chat-input-area button:hover { background: #1557b0; }
         .chat-input-area button i { font-size: 16px; transform: rotate(180deg); }
 
-        /* تصاميم الهواتف الذكية */
+        /* تصاميم الهواتف الذكية الحاكمة للأبعاد */
         @media (max-width: 768px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; padding: 10px 15px; border-left: none; border-bottom: 1px solid #2e2f30; }
@@ -175,7 +175,7 @@ const GEMINI_API_KEY = "AIzaSyA0h60jTXaj2yRWwMLJ1cqXSJSyU-WNMs0";
 const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي عام متطور. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني.";
 
 async function sendMessageToGemini(userMessage) {
-    // الترقية الحتمية والنهائية إلى محرك غوغل المعتمد لعام 2026 عبر النسخة المستقرة v1
+    // الرابط القياسي المحدث والصحيح 100% بدون أي تكرار
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     
     const requestBody = {
