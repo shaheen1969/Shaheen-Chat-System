@@ -19,7 +19,7 @@
             display: flex;
         }
         
-        /* القائمة الجانبية للكمبيوتر */
+        /* القائمة الجانبية المحدثة لتظهر بوضوح */
         .sidebar { width: 280px; background-color: #1e1f20; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid #2e2f30; padding: 15px; flex-shrink: 0; }
         .sidebar-top { display: flex; flex-direction: column; gap: 20px; }
         .brand { font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 5px; }
@@ -28,14 +28,9 @@
         .menu-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #757575; font-weight: bold; margin-top: 10px; }
         .sidebar-btn { background: #2b2c2d; color: #e3e3e3; border: none; padding: 12px 15px; border-radius: 8px; text-align: right; font-family: 'Cairo', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 14px; transition: background 0.2s; }
         .sidebar-btn:hover { background: #37393b; }
-        .sidebar-btn.coming-soon { border: 1px dashed #ffa726; background: rgba(255, 167, 38, 0.05); cursor: default; }
-        .sidebar-btn.coming-soon i { color: #ffa726; }
         .sidebar-btn.story i { color: #ff7043; }
+        .sidebar-btn.key-setting { border: 1px solid #4a90e2; background: rgba(74, 144, 226, 0.1); color: #8ab4f8; }
         .sidebar-bottom { border-top: 1px solid #2e2f30; padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .share-title { font-size: 13px; color: #9aa0a6; text-align: center; }
-        .social-icons { display: flex; justify-content: center; gap: 15px; }
-        .social-icons a { color: #9aa0a6; font-size: 18px; transition: color 0.2s; }
-        .social-icons a:hover { color: #fff; }
 
         /* منطقة الشات الرئيسية */
         .chat-container { 
@@ -48,17 +43,16 @@
             overflow: hidden;
         }
         
-        /* نافذة الرسائل */
+        /* نافذة الرسائل المعدلة لتعطي مساحة كاملة فوق صندوق الكتابة */
         .chat-window { 
             flex: 1; 
-            padding: 20px 5% 140px 5%; 
+            padding: 20px 5% 150px 5%; 
             overflow-y: auto; 
             display: flex; 
             flex-direction: column; 
             gap: 25px; 
         }
         
-        /* الرسائل واضحة وبحجم مثالي */
         .message { display: flex; gap: 15px; padding: 14px 18px; border-radius: 12px; max-width: 85%; line-height: 1.7; font-size: 15px; align-items: flex-start; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { align-self: flex-start; background-color: #2b2c2d; color: #fff; border-bottom-right-radius: 2px; }
@@ -69,22 +63,21 @@
         .message-text { flex: 1; white-space: pre-wrap; padding-top: 2px; }
         .message.loading .message-text { color: #9aa0a6; font-style: italic; }
 
-        /* البطاقات التفاعلية المتجاوبة */
+        /* البطاقات التفاعلية */
         .suggestion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; width: 100%; }
         .suggestion-card { background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 12px; padding: 15px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; height: 100px; transition: all 0.2s ease; }
         .suggestion-card:hover { background-color: #2b2c2d; transform: translateY(-2px); }
-        .suggestion-card .card-text { font-size: 13px; font-weight: 600; color: #e3e3e3; line-height: 1.4; }
-        .suggestion-card .card-icon { align-self: flex-end; font-size: 16px; color: #8ab4f8; }
 
-        /* منطقة الإدخال السفلية المرفوعة بدقة فوق الكيبورد */
+        /* صندوق الكتابة السفلية المرفوع والمحمي بالكامل للهواتف */
         .chat-input-wrapper { 
             position: absolute; 
             bottom: 0; 
             left: 0; 
             right: 0; 
-            padding: 20px 5% 30px 5%; 
-            background: linear-gradient(transparent, #131314 50%); 
+            padding: 20px 5% 40px 5%; /* مسافة أمان ممتازة فوق حافة الهاتف السفلى */
+            background: #131314; 
             z-index: 999; 
+            border-top: 1px solid #2e2f30;
         }
         .chat-input-area { 
             display: flex; 
@@ -99,24 +92,19 @@
             margin: 0 auto; 
         }
         .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; padding: 10px; font-family: 'Cairo', sans-serif; font-size: 16px; outline: none; min-width: 0; }
-        .chat-input-area input::placeholder { color: #9aa0a6; }
-        .chat-input-area button { background: #1a73e8; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.2s; flex-shrink: 0; }
-        .chat-input-area button:hover { background: #1557b0; }
-        .chat-input-area button i { font-size: 16px; transform: rotate(180deg); }
+        .chat-input-area button { background: #1a73e8; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
 
-        /* تصاميم الهواتف الذكية الحاكمة للأبعاد */
+        /* حل مشكلة الهاتف بشكل حاسم */
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; padding: 10px 15px; border-left: none; border-bottom: 1px solid #2e2f30; }
-            .sidebar-bottom, .menu-section { display: none !important; } 
+            .sidebar { width: 100%; height: auto; padding: 12px 15px; border-left: none; border-bottom: 1px solid #2e2f30; }
+            .sidebar-bottom { display: none !important; } 
+            .menu-section { margin-top: 5px; }
             .brand { justify-content: center; font-size: 18px; padding: 5px; }
-            .chat-container { height: calc(100vh - 60px); flex: 1; }
-            .chat-window { padding: 15px 4% 140px 4%; gap: 15px; }
-            .chat-input-wrapper { padding: 15px 4% 35px 4%; background: #131314; } 
-            .suggestion-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
-            .suggestion-card { height: 85px; padding: 10px; }
-            .suggestion-card .card-text { font-size: 12px; }
-            .message { max-width: 95%; font-size: 14px; padding: 10px 14px; }
+            .chat-container { height: calc(100vh - 140px); flex: 1; } /* إعطاء مساحة مريحة جداً */
+            .chat-window { padding: 15px 4% 160px 4%; gap: 15px; }
+            .chat-input-wrapper { padding: 15px 4% 35px 4%; } 
+            .message { max-width: 95%; font-size: 14px; }
         }
     </style>
 </head>
@@ -126,21 +114,10 @@
         <div class="sidebar-top">
             <div class="brand"><i class="fa-solid fa-feather-pointed"></i> <span>شاهين شات</span></div>
             <div class="menu-section">
-                <div class="menu-title">المؤلفات والقصص</div>
                 <a href="https://payhip.com/" target="_blank" class="sidebar-btn story"><i class="fa-solid fa-book-open"></i> <span>خيوط الياسمين في مهبّ الغربة</span></a>
             </div>
             <div class="menu-section">
-                <div class="menu-title">المشاريع الرقمية</div>
-                <div class="sidebar-btn coming-soon"><i class="fa-solid fa-layer-group"></i> <span>نظام توافق الرقمي (قريباً)</span></div>
-            </div>
-        </div>
-        <div class="sidebar-bottom">
-            <div class="share-title">مشاركة المنصة</div>
-            <div class="social-icons">
-                <a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
-                <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="https://wa.me/" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                <button onclick="promptForApiKey()" class="sidebar-btn key-setting"><i class="fa-solid fa-key"></i> <span>تحديث مفتاح API السري</span></button>
             </div>
         </div>
     </div>
@@ -149,15 +126,7 @@
         <div class="chat-window" id="chat-window">
             <div class="message assistant">
                 <div class="message-avatar"><img src="5.jpg" alt="شاهين" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"></div>
-                <div class="message-text">مرحباً بك في منصة شاهين شات الذكية العامة المفتوحة. أنا مساعدك الشخصي المدعوم بأحدث تقنيات الذكاء الاصطناعي، كيف يمكنني مساعدتك اليوم؟</div>
-            </div>
-            <div class="suggestion-grid" id="suggestion-grid">
-                <div class="suggestion-card" onclick="sendSuggestion('إنشاء صورة فنية مبتكرة')"><span class="card-text">🖼️ إنشاء صورة</span><span class="card-icon"><i class="fa-solid fa-image"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('تأليف موسيقى ونغمات ملهمة')"><span class="card-text">🎸 إنشاء موسيقى</span><span class="card-icon"><i class="fa-solid fa-music"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('توليد مقطع فيديو ومقاطع تفاعلية')"><span class="card-text">🎬 أنشئ فيديو</span><span class="card-icon"><i class="fa-solid fa-video"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('كتابة مقال أو فكرة إبداعية')"><span class="card-text">✍️ كتابة أي شيء</span><span class="card-icon"><i class="fa-solid fa-pen-nib"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('ساعدني في تعلم مهارة أو موضوع جديد اليوم')"><span class="card-text">🎓 ساعِدني في التعلّم</span><span class="card-icon"><i class="fa-solid fa-graduation-cap"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('أفكار لتعزيز طاقتي وإنتاجيتي اليوم بنجاح')"><span class="card-text">⚡ عزِّز طاقتي وإنتاجيتي</span><span class="card-icon"><i class="fa-solid fa-bolt"></i></span></div>
+                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات. يرجى تفعيل مفتاحك السري النظيف للبدء.</div>
             </div>
         </div>
         <div class="chat-input-wrapper">
@@ -169,36 +138,40 @@
     </div>
 
 <script>
-// ضع مفتاحك الجديد النظيف والكامل هنا بدقة شديدة بين علامتي التنصيص
-const GEMINI_API_KEY = "AIzaSyA0h60jTXaj2yRWwMLJ1cqXSJSyU-WNMs0"; 
-
 const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي عام متطور. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني.";
 
+function getApiKey() {
+    return localStorage.getItem("SHAHEEN_GEMINI_KEY");
+}
+
+function promptForApiKey() {
+    const key = prompt("يرجى لصق مفتاح جيميناي (Gemini API Key) الجديد والنظيف هنا:");
+    if (key && key.trim().startsWith("AIzaSy")) {
+        localStorage.setItem("SHAHEEN_GEMINI_KEY", key.trim());
+        alert("✅ تم حفظ مفتاحك بنجاح في جهازك وبأمان تام! الموقع جاهز للعمل الآن.");
+        location.reload();
+    } else if (key) {
+        alert("❌ المفتاح غير صحيح، يجب أن يبدأ بـ AIzaSy");
+    }
+}
+
 async function sendMessageToGemini(userMessage) {
-    // الرابط القياسي المحدث والصحيح 100% بدون أي تكرار
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-    
-    const requestBody = {
-        contents: [{
-            role: "user",
-            parts: [{ text: SYSTEM_INSTRUCTION + "\n\nسؤال المستخدم: " + userMessage }]
-        }]
-    };
+    const apiKey = getApiKey();
+    if (!apiKey) {
+        return "⚠️ تنبيه أمني: لم تقم بإدخال مفتاح الـ API الخاص بك بعد. يرجى الضغط على زر 'تحديث مفتاح API السري' في الأعلى ووضعه لتفعيل الذكاء الاصطناعي.";
+    }
+
+    // الرابط المعتمد والمستقر لعام 2026
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const requestBody = { contents: [{ role: "user", parts: [{ text: SYSTEM_INSTRUCTION + "\n\nسؤال المستخدم: " + userMessage }] }] };
 
     try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(requestBody)
-        });
-
+        const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(requestBody) });
         const data = await response.json();
         if (data.error) return "❌ تنبيه من خوادم جوجل: " + data.error.message;
         if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
             return data.candidates[0].content.parts[0].text;
-        } else {
-            return "مرحباً بك، تم معالجة الرسالة ولكن استجابة النص فارغة.";
-        }
+        } else { return "الاستجابة فارغة، يرجى إعادة المحاولة."; }
     } catch (error) { return "❌ خطأ في الشبكة: " + error.message; }
 }
 
@@ -206,6 +179,13 @@ let inputElement, sendBtnElement;
 document.addEventListener("DOMContentLoaded", () => {
     inputElement = document.getElementById("chat-input");
     sendBtnElement = document.getElementById("send-button");
+    
+    if (!getApiKey()) {
+        document.getElementById("welcome-text").innerHTML = "🦅 مرحباً بك في <b>شاهين شات</b> المطور.<br><br><span style='color: #ffa726;'>⚠️ خطوة التفعيل الأمنية:</span> يرجى الضغط على زر <b>'تحديث مفتاح API السري'</b> الظاهر أمامك، ولصق مفتاحك الجديد النظيف لتفعيل المحرك بأمان كامل بعيداً عن حظر جوجل.";
+    } else {
+        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات الذكية. أنا مساعدك الشخصي المحصن بالكامل، كيف يمكنني مساعدتك اليوم؟";
+    }
+
     if (sendBtnElement && inputElement) {
         sendBtnElement.addEventListener("click", handleSend);
         inputElement.addEventListener("keypress", (e) => { if (e.key === "Enter") handleSend(); });
@@ -215,29 +195,19 @@ document.addEventListener("DOMContentLoaded", () => {
 async function handleSend() {
     const messageText = inputElement.value.trim();
     if (!messageText) return;
-    const grid = document.getElementById("suggestion-grid");
-    if (grid) grid.style.display = "none";
-
     appendMessage(messageText, "user", '<i class="fa-solid fa-user"></i>');
     inputElement.value = "";
     appendMessage("جاري التفكير وتحليل البيانات...", "loading", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/6134/6134346.png\'">');
-
     const aiResponse = await sendMessageToGemini(messageText);
     removeLoadingMessage();
     appendMessage(aiResponse, "assistant", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'\'">');
 }
-
-function sendSuggestion(text) { if (inputElement) { inputElement.value = text; handleSend(); } }
-
 function appendMessage(text, sender, avatarContent) {
-    const chatWindow = document.getElementById("chat-window");
-    if (!chatWindow) return;
-    const msgDiv = document.createElement("div");
-    msgDiv.className = `message ${sender}`;
+    const chatWindow = document.getElementById("chat-window"); if (!chatWindow) return;
+    const msgDiv = document.createElement("div"); msgDiv.className = `message ${sender}`;
     if (sender === "loading") msgDiv.id = "gemini-loading";
     msgDiv.innerHTML = `<div class="message-avatar">${avatarContent}</div><div class="message-text">${text}</div>`;
-    chatWindow.appendChild(msgDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+    chatWindow.appendChild(msgDiv); chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 function removeLoadingMessage() { const loadingDiv = document.getElementById("gemini-loading"); if (loadingDiv) loadingDiv.remove(); }
 </script>
