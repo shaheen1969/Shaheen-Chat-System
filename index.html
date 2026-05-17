@@ -8,18 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; width: 100%; overflow: hidden; background-color: #131314; font-family: 'Cairo', sans-serif; color: #e3e3e3; display: flex; }
         
-        html, body { 
-            height: 100%; 
-            width: 100%; 
-            overflow: hidden; 
-            background-color: #131314; 
-            font-family: 'Cairo', sans-serif; 
-            color: #e3e3e3; 
-            display: flex;
-        }
-        
-        /* القائمة الجانبية الفخمة */
         .sidebar { width: 280px; background-color: #1e1f20; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid #2e2f30; padding: 15px; flex-shrink: 0; }
         .sidebar-top { display: flex; flex-direction: column; gap: 20px; }
         .brand { font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 5px; }
@@ -39,29 +29,10 @@
         .social-icons a { color: #9aa0a6; font-size: 18px; transition: color 0.2s; }
         .social-icons a:hover { color: #fff; }
 
-        /* منطقة الشات الرئيسية */
-        .chat-container { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; 
-            position: relative; 
-            background-color: #131314; 
-            overflow: hidden;
-        }
+        .chat-container { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; background-color: #131314; overflow: hidden; }
+        .chat-window { flex: 1; padding: 20px 5% 160px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
         
-        /* نافذة الرسائل */
-        .chat-window { 
-            flex: 1; 
-            padding: 20px 5% 160px 5%; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 25px; 
-        }
-        
-        .message { display: flex; gap: 15px; padding: 14px 18px; border-radius: 12px; max-width: 85%; line-height: 1.7; font-size: 15px; align-items: flex-start; animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .message { display: flex; gap: 15px; padding: 14px 18px; border-radius: 12px; max-width: 85%; line-height: 1.7; font-size: 15px; align-items: flex-start; }
         .message.user { align-self: flex-start; background-color: #2b2c2d; color: #fff; border-bottom-right-radius: 2px; }
         .message.assistant { align-self: flex-end; background-color: transparent; color: #e3e3e3; width: 100%; max-width: 100%; }
         .message-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; overflow: hidden; }
@@ -70,41 +41,17 @@
         .message-text { flex: 1; white-space: pre-wrap; padding-top: 2px; }
         .message.loading .message-text { color: #9aa0a6; font-style: italic; }
 
-        /* البطاقات التفاعلية والشبكة الخاصة بها */
         .suggestion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; width: 100%; }
         .suggestion-card { background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 12px; padding: 15px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; height: 100px; transition: all 0.2s ease; }
         .suggestion-card:hover { background-color: #2b2c2d; transform: translateY(-2px); }
         .suggestion-card .card-text { font-size: 13px; font-weight: 600; color: #e3e3e3; line-height: 1.4; }
         .suggestion-card .card-icon { align-self: flex-end; font-size: 16px; color: #8ab4f8; }
 
-        /* منطقة الإدخال السفلية المرفوعة والمحكومة للهواتف */
-        .chat-input-wrapper { 
-            position: absolute; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            padding: 20px 5% 40px 5%; 
-            background: #131314; 
-            z-index: 999; 
-            border-top: 1px solid #2e2f30;
-        }
-        .chat-input-area { 
-            display: flex; 
-            background-color: #1e1f20; 
-            border: 1px solid #3c4043; 
-            border-radius: 28px; 
-            padding: 6px 15px 6px 6px; 
-            align-items: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-            width: 100%; 
-            max-width: 800px; 
-            margin: 0 auto; 
-        }
+        .chat-input-wrapper { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 5% 40px 5%; background: #131314; z-index: 999; border-top: 1px solid #2e2f30; }
+        .chat-input-area { display: flex; background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 28px; padding: 6px 15px 6px 6px; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; max-width: 800px; margin: 0 auto; }
         .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; padding: 10px; font-family: 'Cairo', sans-serif; font-size: 16px; outline: none; min-width: 0; }
         .chat-input-area button { background: #1a73e8; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
-        .chat-input-area button i { font-size: 16px; transform: rotate(180deg); }
 
-        /* التوافق الكامل والنهائي للهواتف الذكية */
         @media (max-width: 768px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; padding: 12px 15px; border-left: none; border-bottom: 1px solid #2e2f30; }
@@ -118,8 +65,6 @@
             .suggestion-card .card-text { font-size: 12px; }
             .message { max-width: 95%; font-size: 14px; }
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -155,16 +100,16 @@
         <div class="chat-window" id="chat-window">
             <div class="message assistant">
                 <div class="message-avatar"><img src="5.jpg" alt="شاهين" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"></div>
-                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات المتكاملة. يرجى تفعيل مفتاحك السري للبدء.</div>
+                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات المتكاملة والمحدثة. يرجى تفعيل مفتاحك السري للبدء.</div>
             </div>
             
             <div class="suggestion-grid" id="suggestion-grid">
-                <div class="suggestion-card" onclick="sendSuggestion('أريد فكرة مبتكرة لإنشاء صورة فنية مميزة')"><span class="card-text">🖼️ أفكار صور</span><span class="card-icon"><i class="fa-solid fa-image"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('اكتب لي سيناريو لتأليف موسيقى ونغمات ملهمة')"><span class="card-text">🎸 تأليف موسيقى</span><span class="card-icon"><i class="fa-solid fa-music"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('صمم لي سيناريو متكامل لتوليد مقطع فيديو تفاعلي')"><span class="card-text">🎬 أفكار فيديو</span><span class="card-icon"><i class="fa-solid fa-video"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('كتابة مقال أو فكرة إبداعية جديدة')"><span class="card-text">✍️ كتابة إبداعية</span><span class="card-icon"><i class="fa-solid fa-pen-nib"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('أعطني فكرة مبتكرة لصورة فنية مميزة')"><span class="card-text">🖼️ أفكار صور</span><span class="card-icon"><i class="fa-solid fa-image"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('اكتب لي سيناريو موسيقي ملهم')"><span class="card-text">🎸 تأليف موسيقى</span><span class="card-icon"><i class="fa-solid fa-music"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('صمم لي سيناريو متكامل لمقطع فيديو تفاعلي')"><span class="card-text">🎬 أفكار فيديو</span><span class="card-icon"><i class="fa-solid fa-video"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('اكتب لي مقال أو فكرة إبداعية جديدة')"><span class="card-text">✍️ كتابة إبداعية</span><span class="card-icon"><i class="fa-solid fa-pen-nib"></i></span></div>
                 <div class="suggestion-card" onclick="sendSuggestion('صمم لي جدول بيانات منظم ومميز')"><span class="card-text">📊 تصميم جداول</span><span class="card-icon"><i class="fa-solid fa-table"></i></span></div>
-                <div class="suggestion-card" onclick="sendSuggestion('أفكار لتعزيز طاقتي وإنتاجيتي اليوم بنجاح')"><span class="card-text">⚡ تعزيز الإنتاجية</span><span class="card-icon"><i class="fa-solid fa-bolt"></i></span></div>
+                <div class="suggestion-card" onclick="sendSuggestion('أعطني أفكاراً لتعزيز إنتاجيتي اليوم')"><span class="card-text">⚡ تعزيز الإنتاجية</span><span class="card-icon"><i class="fa-solid fa-bolt"></i></span></div>
             </div>
         </div>
         <div class="chat-input-wrapper">
@@ -193,9 +138,8 @@ async function sendMessageToGemini(userMessage) {
 
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
-    // حقن التاريخ الحالي الفعلي للأستاذ محمد ليعرفه المحرك بدقة
     const today = new Date();
-    const dateContext = `تنبيه للنظام: تاريخ اليوم الفعلي الحالي هو الأحد 17 مايو (أيار) 2026 ميلادي. الوقت الحالي هو: ${today.toLocaleTimeString('ar-QA')}. مكان المستخدم الحالي: قطر. يرجى صياغة الإجابات والتواريخ دائماً بناءً على هذا التوقيت الفعلي لعام 2026.`;
+    const dateContext = `تنبيه للنظام: تاريخ اليوم الفعلي الحالي هو الأحد 17 مايو 2026 ميلادي. الوقت الحالي هو: ${today.toLocaleTimeString('ar-QA')}. مكان المستخدم الحالي: قطر، الدوحة. يرجى صياغة الإجابات بناءً على هذا التوقيت الفعلي لعام 2026.`;
 
     const requestBody = { 
         contents: [{ role: "user", parts: [{ text: dateContext + "\n\nسؤال المستخدم: " + userMessage }] }]
@@ -218,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!getApiKey()) {
         document.getElementById("welcome-text").innerHTML = "🦅 مرحباً بك في <b>شاهين شات المطور</b>.<br><br>يرجى الضغط على زر <b>'تحديث مفتاح API السري'</b> في القائمة الجانبية ولصق مفتاحك الجديد النظيف لتنطلق المنصة بثبات كامل.";
     } else {
-        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات الذكية العامة المستقرة لعام 2026. كيف يمكنني مساعدتك اليوم؟";
+        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات الذكية لعام 2026. كيف يمكنني مساعدتك اليوم؟";
     }
     if (sendBtnElement && inputElement) {
         sendBtnElement.addEventListener("click", handleSend);
@@ -239,7 +183,9 @@ async function handleSend() {
     removeLoadingMessage();
     appendMessage(aiResponse, "assistant", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'\'">');
 }
+
 function sendSuggestion(text) { if (inputElement) { inputElement.value = text; handleSend(); } }
+
 function appendMessage(text, sender, avatarContent) {
     const chatWindow = document.getElementById("chat-window"); if (!chatWindow) return;
     const msgDiv = document.createElement("div"); msgDiv.className = `message ${sender}`;
@@ -247,3 +193,8 @@ function appendMessage(text, sender, avatarContent) {
     msgDiv.innerHTML = `<div class="message-avatar">${avatarContent}</div><div class="message-text">${text}</div>`;
     chatWindow.appendChild(msgDiv); chatWindow.scrollTop = chatWindow.scrollHeight;
 }
+
+function removeLoadingMessage() { const loadingDiv = document.getElementById("gemini-loading"); if (loadingDiv) loadingDiv.remove(); }
+</script>
+</body>
+</html>
