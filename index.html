@@ -8,51 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        html, body { 
-            height: 100%; 
-            width: 100%; 
-            overflow: hidden; 
-            background-color: #131314; 
-            font-family: 'Cairo', sans-serif; 
-            color: #e3e3e3; 
-            display: flex;
-        }
-        
-        /* القائمة الجانبية المحدثة لتظهر بوضوح */
+        html, body { height: 100%; width: 100%; overflow: hidden; background-color: #131314; font-family: 'Cairo', sans-serif; color: #e3e3e3; display: flex; }
         .sidebar { width: 280px; background-color: #1e1f20; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid #2e2f30; padding: 15px; flex-shrink: 0; }
         .sidebar-top { display: flex; flex-direction: column; gap: 20px; }
         .brand { font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 5px; }
         .brand i { color: #4a90e2; }
-        .menu-section { display: flex; flex-direction: column; gap: 10px; }
-        .menu-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #757575; font-weight: bold; margin-top: 10px; }
-        .sidebar-btn { background: #2b2c2d; color: #e3e3e3; border: none; padding: 12px 15px; border-radius: 8px; text-align: right; font-family: 'Cairo', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 14px; transition: background 0.2s; }
-        .sidebar-btn:hover { background: #37393b; }
+        .sidebar-btn { background: #2b2c2d; color: #e3e3e3; border: none; padding: 12px 15px; border-radius: 8px; text-align: right; font-family: 'Cairo', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 14px; }
         .sidebar-btn.story i { color: #ff7043; }
         .sidebar-btn.key-setting { border: 1px solid #4a90e2; background: rgba(74, 144, 226, 0.1); color: #8ab4f8; }
-        .sidebar-bottom { border-top: 1px solid #2e2f30; padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
-
-        /* منطقة الشات الرئيسية */
-        .chat-container { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; 
-            position: relative; 
-            background-color: #131314; 
-            overflow: hidden;
-        }
-        
-        /* نافذة الرسائل المعدلة لتعطي مساحة كاملة فوق صندوق الكتابة */
-        .chat-window { 
-            flex: 1; 
-            padding: 20px 5% 150px 5%; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 25px; 
-        }
-        
+        .chat-container { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; background-color: #131314; overflow: hidden; }
+        .chat-window { flex: 1; padding: 20px 5% 150px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
         .message { display: flex; gap: 15px; padding: 14px 18px; border-radius: 12px; max-width: 85%; line-height: 1.7; font-size: 15px; align-items: flex-start; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { align-self: flex-start; background-color: #2b2c2d; color: #fff; border-bottom-right-radius: 2px; }
@@ -62,46 +27,15 @@
         .message.assistant .message-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .message-text { flex: 1; white-space: pre-wrap; padding-top: 2px; }
         .message.loading .message-text { color: #9aa0a6; font-style: italic; }
-
-        /* البطاقات التفاعلية */
-        .suggestion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; width: 100%; }
-        .suggestion-card { background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 12px; padding: 15px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; height: 100px; transition: all 0.2s ease; }
-        .suggestion-card:hover { background-color: #2b2c2d; transform: translateY(-2px); }
-
-        /* صندوق الكتابة السفلية المرفوع والمحمي بالكامل للهواتف */
-        .chat-input-wrapper { 
-            position: absolute; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            padding: 20px 5% 40px 5%; /* مسافة أمان ممتازة فوق حافة الهاتف السفلى */
-            background: #131314; 
-            z-index: 999; 
-            border-top: 1px solid #2e2f30;
-        }
-        .chat-input-area { 
-            display: flex; 
-            background-color: #1e1f20; 
-            border: 1px solid #3c4043; 
-            border-radius: 28px; 
-            padding: 6px 15px 6px 6px; 
-            align-items: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-            width: 100%; 
-            max-width: 800px; 
-            margin: 0 auto; 
-        }
+        .chat-input-wrapper { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 5% 40px 5%; background: #131314; z-index: 999; border-top: 1px solid #2e2f30; }
+        .chat-input-area { display: flex; background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 28px; padding: 6px 15px 6px 6px; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; max-width: 800px; margin: 0 auto; }
         .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; padding: 10px; font-family: 'Cairo', sans-serif; font-size: 16px; outline: none; min-width: 0; }
         .chat-input-area button { background: #1a73e8; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
-
-        /* حل مشكلة الهاتف بشكل حاسم */
         @media (max-width: 768px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; padding: 12px 15px; border-left: none; border-bottom: 1px solid #2e2f30; }
-            .sidebar-bottom { display: none !important; } 
-            .menu-section { margin-top: 5px; }
             .brand { justify-content: center; font-size: 18px; padding: 5px; }
-            .chat-container { height: calc(100vh - 140px); flex: 1; } /* إعطاء مساحة مريحة جداً */
+            .chat-container { height: calc(100vh - 140px); flex: 1; }
             .chat-window { padding: 15px 4% 160px 4%; gap: 15px; }
             .chat-input-wrapper { padding: 15px 4% 35px 4%; } 
             .message { max-width: 95%; font-size: 14px; }
@@ -126,44 +60,42 @@
         <div class="chat-window" id="chat-window">
             <div class="message assistant">
                 <div class="message-avatar"><img src="5.jpg" alt="شاهين" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"></div>
-                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات. يرجى تفعيل مفتاحك السري النظيف للبدء.</div>
+                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات المتصلة بالإنترنت. يرجى تفعيل مفتاحك السري للبدء.</div>
             </div>
         </div>
         <div class="chat-input-wrapper">
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="اسأل شاهين شات عن أي شيء...">
+                <input type="text" id="chat-input" placeholder="اسأل شاهين شات عن أي شيء مباشر...">
                 <button id="send-button"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
 <script>
-const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي عام متطور. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني.";
+const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي متطور متصل ببحث Google لحظياً. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني، واستخدم البحث دائماً لجلب الأرقام والطقس والمعلومات الحية بدقة.";
 
-function getApiKey() {
-    return localStorage.getItem("SHAHEEN_GEMINI_KEY");
-}
+function getApiKey() { return localStorage.getItem("SHAHEEN_GEMINI_KEY"); }
 
 function promptForApiKey() {
     const key = prompt("يرجى لصق مفتاح جيميناي (Gemini API Key) الجديد والنظيف هنا:");
     if (key && key.trim().startsWith("AIzaSy")) {
         localStorage.setItem("SHAHEEN_GEMINI_KEY", key.trim());
-        alert("✅ تم حفظ مفتاحك بنجاح في جهازك وبأمان تام! الموقع جاهز للعمل الآن.");
+        alert("✅ تم حفظ مفتاحك بنجاح! الموقع جاهز للبحث والعمل الآن.");
         location.reload();
-    } else if (key) {
-        alert("❌ المفتاح غير صحيح، يجب أن يبدأ بـ AIzaSy");
-    }
+    } else if (key) { alert("❌ المفتاح غير صحيح"); }
 }
 
 async function sendMessageToGemini(userMessage) {
     const apiKey = getApiKey();
-    if (!apiKey) {
-        return "⚠️ تنبيه أمني: لم تقم بإدخال مفتاح الـ API الخاص بك بعد. يرجى الضغط على زر 'تحديث مفتاح API السري' في الأعلى ووضعه لتفعيل الذكاء الاصطناعي.";
-    }
+    if (!apiKey) return "⚠️ تنبيه: يرجى الضغط على زر 'تحديث مفتاح API السري' ووضعه لتفعيل المحرك.";
 
-    // الرابط المعتمد والمستقر لعام 2026
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    const requestBody = { contents: [{ role: "user", parts: [{ text: SYSTEM_INSTRUCTION + "\n\nسؤال المستخدم: " + userMessage }] }] };
+    
+    // ضبط الإعدادات لتفعيل أداة بحث جوجل (Google Search Tools) تلقائياً مع كل سؤال
+    const requestBody = { 
+        contents: [{ role: "user", parts: [{ text: SYSTEM_INSTRUCTION + "\n\nسؤال المستخدم الحالي: " + userMessage }] }],
+        tools: [{ googleSearch: {} }] 
+    };
 
     try {
         const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(requestBody) });
@@ -179,13 +111,11 @@ let inputElement, sendBtnElement;
 document.addEventListener("DOMContentLoaded", () => {
     inputElement = document.getElementById("chat-input");
     sendBtnElement = document.getElementById("send-button");
-    
     if (!getApiKey()) {
-        document.getElementById("welcome-text").innerHTML = "🦅 مرحباً بك في <b>شاهين شات</b> المطور.<br><br><span style='color: #ffa726;'>⚠️ خطوة التفعيل الأمنية:</span> يرجى الضغط على زر <b>'تحديث مفتاح API السري'</b> الظاهر أمامك، ولصق مفتاحك الجديد النظيف لتفعيل المحرك بأمان كامل بعيداً عن حظر جوجل.";
+        document.getElementById("welcome-text").innerHTML = "🦅 مرحباً بك في <b>شاهين شات المطور بالبحث الحي</b>.<br><br>يرجى الضغط على زر <b>'تحديث مفتاح API السري'</b> في الأعلى ولصق مفتاحك الجديد النظيف والآمن كلياً.";
     } else {
-        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات الذكية. أنا مساعدك الشخصي المحصن بالكامل، كيف يمكنني مساعدتك اليوم؟";
+        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات المتصلة بـ Google للبحث المباشر. كيف يمكنني مساعدتك بمعلومات حية اليوم؟";
     }
-
     if (sendBtnElement && inputElement) {
         sendBtnElement.addEventListener("click", handleSend);
         inputElement.addEventListener("keypress", (e) => { if (e.key === "Enter") handleSend(); });
@@ -193,11 +123,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function handleSend() {
-    const messageText = inputElement.value.trim();
-    if (!messageText) return;
+    const messageText = inputElement.value.trim(); if (!messageText) return;
     appendMessage(messageText, "user", '<i class="fa-solid fa-user"></i>');
     inputElement.value = "";
-    appendMessage("جاري التفكير وتحليل البيانات...", "loading", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/6134/6134346.png\'">');
+    appendMessage("جاري البحث في Google وتحليل البيانات الحية...", "loading", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/6134/6134346.png\'">');
     const aiResponse = await sendMessageToGemini(messageText);
     removeLoadingMessage();
     appendMessage(aiResponse, "assistant", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'\'">');
