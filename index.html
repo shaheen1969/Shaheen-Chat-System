@@ -2,15 +2,24 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>شاهين شات | ShaheenChat</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Cairo', sans-serif; background-color: #131314; color: #e3e3e3; display: flex; height: 100vh; height: -webkit-fill-available; overflow: hidden; }
         
-        /* القائمة الجانبية - متجاوبة وراقية */
+        html, body { 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #131314; 
+            font-family: 'Cairo', sans-serif; 
+            color: #e3e3e3; 
+            display: flex;
+        }
+        
+        /* القائمة الجانبية للكمبيوتر */
         .sidebar { width: 280px; background-color: #1e1f20; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid #2e2f30; padding: 15px; flex-shrink: 0; }
         .sidebar-top { display: flex; flex-direction: column; gap: 20px; }
         .brand { font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 5px; }
@@ -28,9 +37,26 @@
         .social-icons a { color: #9aa0a6; font-size: 18px; transition: color 0.2s; }
         .social-icons a:hover { color: #fff; }
 
-        /* منطقة الشات الرئيسية وضمان عدم الهروب تحت الشاشة */
-        .chat-container { flex: 1; display: flex; flex-direction: column; background-color: #131314; position: relative; height: 100%; overflow: hidden; }
-        .chat-window { flex: 1; padding: 20px 5% 100px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
+        /* منطقة الشات الرئيسية */
+        .chat-container { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            position: relative; 
+            background-color: #131314; 
+            overflow: hidden;
+        }
+        
+        /* نافذة الرسائل */
+        .chat-window { 
+            flex: 1; 
+            padding: 20px 5% 140px 5%; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 25px; 
+        }
         
         /* الرسائل واضحة وبحجم مثالي */
         .message { display: flex; gap: 15px; padding: 14px 18px; border-radius: 12px; max-width: 85%; line-height: 1.7; font-size: 15px; align-items: flex-start; animation: fadeIn 0.2s ease; }
@@ -43,39 +69,55 @@
         .message-text { flex: 1; white-space: pre-wrap; padding-top: 2px; }
         .message.loading .message-text { color: #9aa0a6; font-style: italic; }
 
-        /* البطاقات التفاعلية المتجاوبة للهواتف */
+        /* البطاقات التفاعلية المتجاوبة */
         .suggestion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; width: 100%; }
         .suggestion-card { background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 12px; padding: 15px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; height: 100px; transition: all 0.2s ease; }
         .suggestion-card:hover { background-color: #2b2c2d; transform: translateY(-2px); }
         .suggestion-card .card-text { font-size: 13px; font-weight: 600; color: #e3e3e3; line-height: 1.4; }
         .suggestion-card .card-icon { align-self: flex-end; font-size: 16px; color: #8ab4f8; }
 
-        /* منطقة الإدخال السفلية المرفوعة بدقة فوق كيبورد الهاتف */
-        .chat-input-wrapper { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 5%; background: linear-gradient(transparent, #131314 30%); z-index: 10; }
-        .chat-input-area { display: flex; background-color: #1e1f20; border: 1px solid #3c4043; border-radius: 28px; padding: 5px 12px 5px 5px; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); width: 100%; max-width: 800px; margin: 0 auto; }
-        .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; padding: 10px; font-family: 'Cairo', sans-serif; font-size: 15px; outline: none; min-width: 0; }
+        /* منطقة الإدخال السفلية المرفوعة بدقة */
+        .chat-input-wrapper { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            padding: 20px 5% 30px 5%; 
+            background: linear-gradient(transparent, #131314 50%); 
+            z-index: 999; 
+        }
+        .chat-input-area { 
+            display: flex; 
+            background-color: #1e1f20; 
+            border: 1px solid #3c4043; 
+            border-radius: 28px; 
+            padding: 6px 15px 6px 6px; 
+            align-items: center; 
+            box-shadow: 0 4px 15 rgba(0,0,0,0.5); 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; padding: 10px; font-family: 'Cairo', sans-serif; font-size: 16px; outline: none; min-width: 0; }
         .chat-input-area input::placeholder { color: #9aa0a6; }
-        .chat-input-area button { background: #1a73e8; color: white; border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.2s; flex-shrink: 0; }
+        .chat-input-area button { background: #1a73e8; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.2s; flex-shrink: 0; }
         .chat-input-area button:hover { background: #1557b0; }
-        .chat-input-area button i { font-size: 15px; transform: rotate(180deg); }
+        .chat-input-area button i { font-size: 16px; transform: rotate(180deg); }
 
-        /* تعديلات الهواتف الذكية لمنع اختفاء الصندوق */
+        /* تصاميم الهواتف الذكية */
         @media (max-width: 768px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; padding: 10px 15px; border-left: none; border-bottom: 1px solid #2e2f30; }
-            .sidebar-bottom, .menu-section { display: none; } 
+            .sidebar-bottom, .menu-section { display: none !important; } 
             .brand { justify-content: center; font-size: 18px; padding: 5px; }
-            .chat-container { height: calc(100vh - 55px); }
-            .chat-window { padding: 15px 4% 90px 4%; gap: 15px; }
-            .chat-input-wrapper { padding: 10px 4%; }
+            .chat-container { height: calc(100vh - 60px); flex: 1; }
+            .chat-window { padding: 15px 4% 140px 4%; gap: 15px; }
+            .chat-input-wrapper { padding: 15px 4% 35px 4%; background: #131314; } 
             .suggestion-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
             .suggestion-card { height: 85px; padding: 10px; }
             .suggestion-card .card-text { font-size: 12px; }
             .message { max-width: 95%; font-size: 14px; padding: 10px 14px; }
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #131314; }
-        ::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -107,7 +149,7 @@
         <div class="chat-window" id="chat-window">
             <div class="message assistant">
                 <div class="message-avatar"><img src="5.jpg" alt="شاهين" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"></div>
-                <div class="message-text">مرحباً بك في منصة شاهين شات الذكية العامة. أنا مساعدك الشخصي المدعوم بأحدث تقنيات الذكاء الاصطناعي، كيف يمكنني مساعدتك اليوم؟</div>
+                <div class="message-text">مرحباً بك في منصة شاهين شات الذكية العامة المفتوحة. أنا مساعدك الشخصي المدعوم بأحدث تقنيات الذكاء الاصطناعي، كيف يمكنني مساعدتك اليوم؟</div>
             </div>
             <div class="suggestion-grid" id="suggestion-grid">
                 <div class="suggestion-card" onclick="sendSuggestion('إنشاء صورة فنية مبتكرة')"><span class="card-text">🖼️ إنشاء صورة</span><span class="card-icon"><i class="fa-solid fa-image"></i></span></div>
@@ -127,13 +169,14 @@
     </div>
 
 <script>
-// حيلة برمجية فائقة الأمان: قمنا بتقسيم المفتاح إلى أجزاء لمنع روبوتات جوجل من حظره تلقائياً
-const GEMINI_API_KEY = "AIzaSyB5lf4dU_rYMtBk4k09BhSWhIlI14H9sgw";
+// ضع مفتاحك الجديد النظيف والكامل هنا بدقة شديدة بين علامتي التنصيص
+const GEMINI_API_KEY = "AIzaSyA0h60jTXaj2yRWwMLJ1cqXSJSyU-WNMs0"; 
 
 const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي عام متطور. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني.";
 
 async function sendMessageToGemini(userMessage) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // الترقية الحتمية والنهائية إلى محرك غوغل المعتمد لعام 2026 عبر النسخة المستقرة v1
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     
     const requestBody = {
         contents: [{
