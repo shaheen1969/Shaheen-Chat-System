@@ -60,19 +60,19 @@
         <div class="chat-window" id="chat-window">
             <div class="message assistant">
                 <div class="message-avatar"><img src="5.jpg" alt="شاهين" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"></div>
-                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات المتصلة بالإنترنت. يرجى تفعيل مفتاحك السري للبدء.</div>
+                <div class="message-text" id="welcome-text">مرحباً بك في منصة شاهين شات المتكاملة والمحمية. يرجى تفعيل مفتاحك السري للبدء.</div>
             </div>
         </div>
         <div class="chat-input-wrapper">
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="اسأل شاهين شات عن أي شيء مباشر...">
+                <input type="text" id="chat-input" placeholder="اسأل شاهين شات عن أي شيء...">
                 <button id="send-button"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
 <script>
-const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي متطور متصل ببحث Google لحظياً. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني، واستخدم البحث دائماً لجلب الأرقام والطقس والمعلومات الحية بدقة.";
+const SYSTEM_INSTRUCTION = "أنت شاهين شات، نموذج ذكاء اصطناعي ومساعد ذكي عام متطور. أجب على كافة أسئلة المستخدمين بدقة وذكاء وفخامة وبأسلوب وقور وحكيم يعكس التوازن القيادي والإنساني.";
 
 function getApiKey() { return localStorage.getItem("SHAHEEN_GEMINI_KEY"); }
 
@@ -80,7 +80,7 @@ function promptForApiKey() {
     const key = prompt("يرجى لصق مفتاح جيميناي (Gemini API Key) الجديد والنظيف هنا:");
     if (key && key.trim().startsWith("AIzaSy")) {
         localStorage.setItem("SHAHEEN_GEMINI_KEY", key.trim());
-        alert("✅ تم حفظ مفتاحك بنجاح! الموقع جاهز للبحث والعمل الآن.");
+        alert("✅ تم حفظ مفتاحك بنجاح في جهازك! الموقع جاهز ومستقر تماماً للعمل الآن.");
         location.reload();
     } else if (key) { alert("❌ المفتاح غير صحيح"); }
 }
@@ -89,12 +89,11 @@ async function sendMessageToGemini(userMessage) {
     const apiKey = getApiKey();
     if (!apiKey) return "⚠️ تنبيه: يرجى الضغط على زر 'تحديث مفتاح API السري' ووضعه لتفعيل المحرك.";
 
+    // العودة للرابط القياسي والمستقر كلياً المستعمل عالمياً
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
-    // ضبط الإعدادات لتفعيل أداة بحث جوجل (Google Search Tools) تلقائياً مع كل سؤال
     const requestBody = { 
-        contents: [{ role: "user", parts: [{ text: SYSTEM_INSTRUCTION + "\n\nسؤال المستخدم الحالي: " + userMessage }] }],
-        tools: [{ googleSearch: {} }] 
+        contents: [{ role: "user", parts: [{ text: SYSTEM_INSTRUCTION + "\n\nسؤال المستخدم الحالي: " + userMessage }] }]
     };
 
     try {
@@ -112,9 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
     inputElement = document.getElementById("chat-input");
     sendBtnElement = document.getElementById("send-button");
     if (!getApiKey()) {
-        document.getElementById("welcome-text").innerHTML = "🦅 مرحباً بك في <b>شاهين شات المطور بالبحث الحي</b>.<br><br>يرجى الضغط على زر <b>'تحديث مفتاح API السري'</b> في الأعلى ولصق مفتاحك الجديد النظيف والآمن كلياً.";
+        document.getElementById("welcome-text").innerHTML = "🦅 مرحباً بك في <b>شاهين شات</b>.<br><br>يرجى الضغط على زر <b>'تحديث مفتاح API السري'</b> في الأعلى ولصق مفتاحك الجديد النظيف لتنطلق المنصة بأمان وثبات للأبد.";
     } else {
-        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات المتصلة بـ Google للبحث المباشر. كيف يمكنني مساعدتك بمعلومات حية اليوم؟";
+        document.getElementById("welcome-text").innerHTML = "مرحباً بك في منصة شاهين شات الذكية العامة المستقرة. كيف يمكنني مساعدتك اليوم؟";
     }
     if (sendBtnElement && inputElement) {
         sendBtnElement.addEventListener("click", handleSend);
@@ -126,7 +125,7 @@ async function handleSend() {
     const messageText = inputElement.value.trim(); if (!messageText) return;
     appendMessage(messageText, "user", '<i class="fa-solid fa-user"></i>');
     inputElement.value = "";
-    appendMessage("جاري البحث في Google وتحليل البيانات الحية...", "loading", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/6134/6134346.png\'">');
+    appendMessage("جاري التفكير وتحليل البيانات...", "loading", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/6134/6134346.png\'">');
     const aiResponse = await sendMessageToGemini(messageText);
     removeLoadingMessage();
     appendMessage(aiResponse, "assistant", '<img src="5.jpg" alt="شاهين" onerror="this.src=\'\'">');
